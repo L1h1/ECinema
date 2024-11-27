@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECinema", "ECinema\ECinema.csproj", "{2B5A12EF-67A5-4D24-9712-4928574F93C5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECinema.Data", "ECinema.Data\ECinema.Data.csproj", "{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECinema.API", "ECinema.API\ECinema.API.csproj", "{A2351BB2-7C75-4C66-9339-7690E5C25ACD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2B5A12EF-67A5-4D24-9712-4928574F93C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5A12EF-67A5-4D24-9712-4928574F93C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5A12EF-67A5-4D24-9712-4928574F93C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5A12EF-67A5-4D24-9712-4928574F93C5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2351BB2-7C75-4C66-9339-7690E5C25ACD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2351BB2-7C75-4C66-9339-7690E5C25ACD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2351BB2-7C75-4C66-9339-7690E5C25ACD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2351BB2-7C75-4C66-9339-7690E5C25ACD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D8AE3780-00DC-4ACC-A25F-BAB09098BDFC}
+	EndGlobalSection
+EndGlobal
