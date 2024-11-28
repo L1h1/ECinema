@@ -40,7 +40,7 @@ app.MapRazorComponents<App>()
 //Создание таблиц
 //await DbInitializer.ExecuteTablesCreation(app.Services);
 //Наполнение тестовыми данными
-await DbInitializer.SeedData(app.Services);
+//await DbInitializer.SeedData(app.Services);
 
 
 

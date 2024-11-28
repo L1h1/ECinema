@@ -49,7 +49,7 @@ namespace ECinema.WebApi.Controllers
 
         // PUT: api/cinemas/name
         [Authorize(Roles = "Admin")]
-        [HttpPut("/name")]
+        [HttpPut("name")]
         public async Task<IActionResult> UpdateCinemaName([FromBody] UpdateCinemaNameRequest request)
         {
             await _mediator.Send(request);
@@ -58,7 +58,7 @@ namespace ECinema.WebApi.Controllers
 
         // PUT: api/cinemas/{id}/website
         [Authorize(Roles = "Admin")]
-        [HttpPut("/website")]
+        [HttpPut("website")]
         public async Task<IActionResult> UpdateCinemaWebsite(int id, [FromBody] UpdateCinemaWebsiteRequest request)
         {
             await _mediator.Send(request);

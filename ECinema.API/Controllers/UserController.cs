@@ -114,7 +114,7 @@ public class UsersController : ControllerBase
     }
 
     [Authorize(Roles = "User,Admin")]
-    [HttpPut("/email")]
+    [HttpPut("email")]
     public async Task<IActionResult> UpdateUserEmail([FromBody] UpdateUserEmailRequest request)
     {
         var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -134,7 +134,7 @@ public class UsersController : ControllerBase
     }
 
     [Authorize(Roles = "User,Admin")]
-    [HttpPut("/password")]
+    [HttpPut("password")]
     public async Task<IActionResult> UpdateUserPassword([FromBody] UpdateUserPasswordRequest request)
     {
         var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;

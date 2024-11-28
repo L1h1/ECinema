@@ -35,6 +35,13 @@ namespace ECinema.Data.Queries
         FROM Movies 
         WHERE MovieId = @MovieId;";
 
+        public static string SelectMovieByNameQuery = @"
+        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt
+        FROM Movies
+        WHERE Title = @Title;";
+
+
+
         public static string SelectAllMoviesQuery = @"
         SELECT 
             MovieId, 
