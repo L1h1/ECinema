@@ -27,6 +27,14 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("movie/{movieId}")]
+        public async Task<IActionResult> GetCinemasByMovie(int movieId)
+        {
+            var request = new SelectCinemasByMovieRequest() { MovieId = movieId};
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
         // GET: api/cinemas/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCinemaById(int id)

@@ -35,7 +35,7 @@ namespace ECinema.WebApi.Controllers
             }
         }
 
-        // GET: api/movies/title
+        // GET: api/movie/title
         [HttpGet("title/{title}")]
         public async Task<IActionResult> GetMovieById(string title)
         {
@@ -46,7 +46,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // GET: api/movies/{id}
+        // GET: api/movie/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMovieById(int id)
         {
@@ -57,7 +57,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // POST: api/movies
+        // POST: api/movie
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateMovie([FromBody] InsertMovieRequest request)
@@ -66,7 +66,7 @@ namespace ECinema.WebApi.Controllers
             return CreatedAtAction(nameof(GetMovieById), new { id = movieId }, null);
         }
 
-        // PUT: api/movies
+        // PUT: api/movie
         [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateMovieDetails([FromBody] UpdateMovieDetailsRequest request)
@@ -77,7 +77,7 @@ namespace ECinema.WebApi.Controllers
             return NoContent();
         }
 
-        // PUT: api/movies/title
+        // PUT: api/movie/title
         [Authorize(Roles = "Admin")]
         [HttpPut("title")]
         public async Task<IActionResult> UpdateMovieTitle([FromBody] UpdateMovieTitleRequest request)
@@ -88,7 +88,7 @@ namespace ECinema.WebApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/movies/{movieId}/actor/{actorId}
+        // DELETE: api/movie/{movieId}/actor/{actorId}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{movieId}/actor/{actorId}")]
         public async Task<IActionResult> DeleteMovieActor(int movieId, int actorId)
@@ -98,7 +98,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/movies/{id}
+        // DELETE: api/movie/{id}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
@@ -110,7 +110,7 @@ namespace ECinema.WebApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/movies/{movieId}/cinema/{cinemaId}
+        // DELETE: api/movie/{movieId}/cinema/{cinemaId}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{movieId}/cinema/{cinemaId}")]
         public async Task<IActionResult> DeleteMovieCinema(int movieId, int cinemaId)
@@ -120,7 +120,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // DELETE: api/movies/{movieId}/genre/{genreId}
+        // DELETE: api/movie/{movieId}/genre/{genreId}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{movieId}/genre/{genreId}")]
         public async Task<IActionResult> DeleteMovieGenre(int movieId, int genreId)
@@ -130,7 +130,7 @@ namespace ECinema.WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/movies/actor
+        // POST: api/movie/actor
         [Authorize(Roles = "Admin")]
         [HttpPost("actor")]
         public async Task<IActionResult> AddMovieActor([FromBody] InsertMovieActorRequest request)
@@ -139,7 +139,7 @@ namespace ECinema.WebApi.Controllers
             return CreatedAtAction(nameof(GetMovieById), actorId);
         }
 
-        // POST: api/movies/cinema
+        // POST: api/movie/cinema
         [Authorize(Roles = "Admin")]
         [HttpPost("cinema")]
         public async Task<IActionResult> AddMovieCinema([FromBody] InsertMovieCinemaRequest request)
@@ -148,7 +148,7 @@ namespace ECinema.WebApi.Controllers
             return CreatedAtAction(nameof(GetMovieById), cinemaId);
         }
 
-        // POST: api/movies/genre
+        // POST: api/movie/genre
         [Authorize(Roles = "Admin")]
         [HttpPost("genre")]
         public async Task<IActionResult> AddMovieGenre([FromBody] InsertMovieGenreRequest request)
@@ -157,16 +157,16 @@ namespace ECinema.WebApi.Controllers
             return CreatedAtAction(nameof(GetMovieById), genreId);
         }
 
-        // GET: api/movies/actor/{actorId}
+        // GET: api/movie/actor/{actorId}
         [HttpGet("actor/{actorId}")]
-        public async Task<IActionResult> GetMoviesByActor(int actorId)
+        public async Task<IActionResult> GetMoviesByActors(int actorId)
         {
             var request = new SelectMoviesByActorRequest { ActorId = actorId };
             var result = await _mediator.Send(request);
             return Ok(result);
         }
 
-        // GET: api/movies/cinema/{cinemaId}
+        // GET: api/movie/cinema/{cinemaId}
         [HttpGet("cinema/{cinemaId}")]
         public async Task<IActionResult> GetMoviesByCinema(int cinemaId)
         {
@@ -175,7 +175,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // GET: api/movies/genre/{genreId}
+        // GET: api/movie/genre/{genreId}
         [HttpGet("genre/{genreId}")]
         public async Task<IActionResult> GetMoviesByGenre(int genreId)
         {

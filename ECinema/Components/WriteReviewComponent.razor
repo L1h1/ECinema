@@ -1,0 +1,45 @@
+﻿@inject HttpClient Http
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h6">Write a Review</MudText>
+        
+        <!-- Строка для ввода отзыва -->
+        <MudTextField @bind-Value="reviewContent" Label="Your Review" Lines="4" FullWidth="true" />
+
+        <!-- Слайдер для ввода оценки от 1 до 10 -->
+        <MudText Typo="Typo.body2">Current Rating: @rating</MudText>
+        <MudSlider @bind-Value="rating" Min="1" Max="10" Step="1" Label="Rating" />
+
+        <!-- Кнопка отправки отзыва -->
+        <MudButton Color="Color.Primary" OnClick="SubmitReview">Submit</MudButton>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private string reviewContent;
+    private int rating = 5;
+    [Parameter] public int MovieId { get; set; }
+
+    [Parameter] public Action TriggerRender { get; set; }
+
+    private async Task SubmitReview()
+    {
+        if (string.IsNullOrWhiteSpace(reviewContent))
+        {
+            return;
+        }
+
+        var newReview = new Review()
+        {
+            MovieId = MovieId,
+            UserId = 0,  // !!!!!!!!!
+            ReviewText = reviewContent,
+            ReviewRating = rating,  
+            CreatedAt = DateTime.UtcNow
+        };
+
+
+        await Http.PostAsJsonAsync($"api/review", newReview);
+        TriggerRender?.Invoke();
+    }
+}

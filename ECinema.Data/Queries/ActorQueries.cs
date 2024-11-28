@@ -30,5 +30,11 @@ namespace ECinema.Data.Queries
         FROM Actors
         WHERE ActorId = @ActorId;";
 
+        public static string SelectActorsByMovieQuery = @"
+        SELECT a.ActorId, a.ActorName, a.DateOfBirth, a.Bio
+        FROM Actors a
+        INNER JOIN MovieActors ma ON a.ActorId = ma.ActorId
+        WHERE ma.MovieId = @MovieId;";
+
     }
 }

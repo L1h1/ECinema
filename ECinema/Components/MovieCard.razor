@@ -18,7 +18,7 @@
 
     private void NavigateToDetails()
     {
-        NavigationManager.NavigateTo($"movie/{MovieId}");
+        NavigationManager.NavigateTo($"/movie/{MovieId}");
     }
 
     [Inject] private NavigationManager NavigationManager { get; set; }

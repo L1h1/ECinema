@@ -44,7 +44,8 @@ namespace ECinema.Data.Queries
             Title VARCHAR(255) NOT NULL,   
             Description TEXT,  
             ReleaseYear INT,       
-            DurationMinutes INT,    
+            DurationMinutes INT,
+            TrailerUrl VARCHAR(255),
             CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
         );";
 

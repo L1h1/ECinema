@@ -1,0 +1,60 @@
+﻿@page "/movie/{MovieId:int}"
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+@if(movie==null){
+
+}
+else
+{
+    <MudMainContent Class="ma-4">
+        <MudContainer MaxWidth="MaxWidth.Large">
+        <MudGrid>
+            <MudItem xs="12" sm="6" md="4">
+                <MudCard Style="max-width: 200px; margin: auto;">
+                    <MudCardMedia Image="@GetURI(MovieId)" />
+                    <MudCardContent>
+                        <MudText Typo="Typo.h5">@movie.Title</MudText>
+                        <MudText>@movie.Description</MudText>
+                        <MudText><b>Release Year:</b> @movie.ReleaseYear</MudText>
+                        <MudText><b>Duration:</b> @movie.DurationMinutes minutes</MudText>
+                    </MudCardContent>
+                </MudCard>
+            </MudItem>
+            <MudItem xs="12" sm="6" md="8" >
+                <MudCard Style="height:500px">
+                    <MudCardContent >
+                        <iframe src="@movie.TrailerUrl"></iframe>
+                    </MudCardContent>
+                </MudCard>
+
+                <!-- Написать отзыв -->
+                <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview"/>
+                <!-- Отзывы -->
+                <ReviewsComponent MovieId="@MovieId" @ref="refComp"/>
+            </MudItem>
+        </MudGrid>
+    </MudContainer>
+    </MudMainContent>
+}
+
+@code {
+    [Parameter] public int MovieId { get; set; }
+
+    ReviewsComponent refComp;
+
+    private Movie? movie;
+
+    protected override async Task OnInitializedAsync()
+    {
+        movie = await Http.GetFromJsonAsync<Movie>($"api/movie/{MovieId}");
+        StateHasChanged();
+    }
+    private string GetURI(int id) => $"/Posters/{id}.png";
+
+    public void RefreshReview()
+    {
+        refComp.Refresh();
+    }
+
+}

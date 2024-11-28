@@ -14,5 +14,6 @@ namespace ECinema.Data.Entities
         public int ReleaseYear { get; set; }
         public int DurationMinutes { get; set; }
         public DateTime CreatedAt { get; set; }
+        public string TrailerUrl { get; set; }
     }
 }

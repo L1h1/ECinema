@@ -34,5 +34,12 @@ namespace ECinema.Data.Queries
         public static string SelectAllCinemasQuery = @"
         SELECT CinemaId, CinemaName, WebsiteUrl 
         FROM Cinemas;";
+
+        public static string SelectCinemasByMovieQuery = @"
+        SELECT c.CinemaId, c.CinemaName, c.WebsiteUrl 
+        FROM Cinemas c
+        INNER JOIN MovieCinemas mc ON mc.CinemaId = c.CinemaId
+        WHERE mc.MovieId = @MovieId;";
+
     }
 }

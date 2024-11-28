@@ -40,10 +40,11 @@ namespace ECinema.WebApi.Controllers
         }
 
         // POST: api/reviews
-        [Authorize(Roles = "Admin,User")]
+        //[Authorize(Roles = "Admin,User")]
         [HttpPost]
         public async Task<IActionResult> CreateReview([FromBody] InsertReviewRequest request)
         {
+
             var userIdFromToken = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var isAdmin = User.IsInRole("Admin");

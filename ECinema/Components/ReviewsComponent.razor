@@ -1,0 +1,40 @@
+﻿@inject HttpClient Http
+<MudCard>
+    <MudCardContent>
+        <MudText Typo="Typo.h6">Reviews</MudText>
+        @if (reviews == null)
+        {
+            <MudText>Loading...</MudText>
+        }
+        else
+        {
+            @foreach (var review in reviews)
+            {
+                <MudCard>
+                    <MudCardContent>
+                        <MudText><b>@review.ReviewRating</b> - @review.CreatedAt.ToString("dd MMM yyyy")</MudText>
+                        <MudText>@review.ReviewText</MudText>
+                    </MudCardContent>
+                </MudCard>
+            }
+        }
+    </MudCardContent>
+</MudCard>
+
+@code {
+    private List<Review> reviews;
+
+    [Parameter] public int MovieId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        reviews = await Http.GetFromJsonAsync<List<Review>>($"api/review/movie/{MovieId}");
+
+    }
+
+    public void Refresh()
+    {
+        StateHasChanged();
+    }
+
+}

@@ -17,7 +17,7 @@ namespace ECinema.WebApi.Controllers
             _mediator = mediator;
         }
 
-        // GET: api/actors
+        // GET: api/actor
         [HttpGet]
         public async Task<IActionResult> GetAllActors()
         {
@@ -26,7 +26,16 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // GET: api/actors/{id}
+        // GET: api/actor
+        [HttpGet("movie/{movieId}")]
+        public async Task<IActionResult> GetActorsByMovie(int movieId)
+        {
+            var request = new SelectActorsByMovieRequest() { MovieId = movieId};
+            var result = await _mediator.Send(request);
+            return Ok(result);
+        }
+
+        // GET: api/actor/{id}
         [HttpGet("{id}")]
         public async Task<IActionResult> GetActorById(int id)
         {
@@ -37,7 +46,7 @@ namespace ECinema.WebApi.Controllers
             return Ok(result);
         }
 
-        // POST: api/actors
+        // POST: api/actor
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> CreateActor([FromBody] InsertActorRequest request)
@@ -46,7 +55,7 @@ namespace ECinema.WebApi.Controllers
             return CreatedAtAction(nameof(GetActorById), new { id = result }, result);
         }
 
-        // PUT: api/actors
+        // PUT: api/actor
         [Authorize(Roles = "Admin")]
         [HttpPut]
         public async Task<IActionResult> UpdateActor([FromBody] UpdateActorRequest request)
@@ -55,7 +64,7 @@ namespace ECinema.WebApi.Controllers
             return NoContent();
         }
 
-        // DELETE: api/actors/{id}
+        // DELETE: api/actor/{id}
         [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActor(int id)
