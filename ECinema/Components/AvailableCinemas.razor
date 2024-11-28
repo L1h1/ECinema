@@ -1,0 +1,42 @@
+﻿@using MudBlazor
+@inject HttpClient Http
+@if (Cinemas != null)
+{
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h5" Class="mb-4">Available on</MudText>
+            <div style="display: flex; flex-direction: row; overflow-x: auto; gap: 16px; padding: 8px;">
+                @foreach (var cinema in Cinemas)
+                {
+                    <MudCard Style="flex-shrink: 0;" Class="mud-elevation-3">
+                        <MudCardContent>
+
+                            <MudButton Href="@cinema.WebsiteUrl" Variant="Variant.Text" Color="Color.Primary">
+                                @cinema.CinemaName
+                            </MudButton>
+@*                             <MudButton OnClick="@(()=>Navigate(cinema.CinemaId));" Variant="Variant.Text" Color="Color.Default">
+                                Other films
+                            </MudButton> *@
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </div>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code {
+    [Parameter] public int MovieId { get; set; }
+
+    List<Cinema> Cinemas;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Cinemas = await Http.GetFromJsonAsync<List<Cinema>>($"api/cinema/movie/{MovieId}");
+    }
+
+    async Task Navigate(int cinemaId)
+    {
+        
+    }
+}

@@ -15,7 +15,7 @@ else
                     <MudCardMedia Image="@GetURI(MovieId)" />
                     <MudCardContent>
                         <MudText Typo="Typo.h5">@movie.Title</MudText>
-                        <MudText>@movie.Description</MudText>
+
                         <MudText><b>Release Year:</b> @movie.ReleaseYear</MudText>
                         <MudText><b>Duration:</b> @movie.DurationMinutes minutes</MudText>
                     </MudCardContent>
@@ -27,12 +27,44 @@ else
                         <iframe src="@movie.TrailerUrl"></iframe>
                     </MudCardContent>
                 </MudCard>
+                </MudItem>
 
-                <!-- Написать отзыв -->
-                <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview"/>
-                <!-- Отзывы -->
-                <ReviewsComponent MovieId="@MovieId" @ref="refComp"/>
-            </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="8">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudText>@movie.Description</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="4">
+
+                </MudItem>
+
+                <MudItem xs="12" sm="6" md="8">
+                    <AvailableCinemas MovieId="@MovieId"></AvailableCinemas>
+                </MudItem>
+
+                
+                <MudItem xs="12" sm="6" md="4">
+                    
+                </MudItem>
+                <MudItem xs="12" sm="6" md="8">
+                    <ActorCard MovieId="@MovieId"></ActorCard>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+
+                </MudItem>
+                <MudItem xs="12" sm="6" md="8">
+                    <!-- Написать отзыв -->
+                    <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview" />
+                    <!-- Отзывы -->
+                    <ReviewsComponent MovieId="@MovieId" @ref="refComp" />
+                </MudItem>
         </MudGrid>
     </MudContainer>
     </MudMainContent>

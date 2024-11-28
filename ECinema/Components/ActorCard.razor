@@ -1,0 +1,36 @@
+﻿@using MudBlazor
+@inject HttpClient Http
+@if (Actors != null)
+{
+    <MudCard>
+        <MudCardContent>
+            <MudText Typo="Typo.h5" Class="mb-4">Actors</MudText>
+            <div style="display: flex; flex-direction: row; overflow-x: auto; gap: 16px; padding: 8px;">
+                @foreach (var actor in Actors)
+                {
+                    <MudCard Style="min-width: 200px; flex-shrink: 0;" Class="mud-elevation-3">
+                        <MudCardContent>
+                            <MudButton Variant="Variant.Text" Color="Color.Primary">
+                                @actor.ActorName
+                            </MudButton>
+                            <MudText Typo="Typo.subtitle1">@actor.DateOfBirth.Value.ToString("dd MMM yyyy")</MudText>
+                            <MudText Typo="Typo.subtitle2">@actor.Bio</MudText>
+                        </MudCardContent>
+                    </MudCard>
+                }
+            </div>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code{
+    [Parameter] public int MovieId { get; set; }
+
+    List<Actor> Actors;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Actors = await Http.GetFromJsonAsync<List<Actor>>($"api/actor/movie/{MovieId}");
+
+    }
+}

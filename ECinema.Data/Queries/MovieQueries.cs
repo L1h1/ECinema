@@ -36,7 +36,7 @@ namespace ECinema.Data.Queries
         WHERE MovieId = @MovieId;";
 
         public static string SelectMovieByNameQuery = @"
-        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAtm, TrailerUrl
+        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt, TrailerUrl
         FROM Movies
         WHERE Title LIKE '%@Title%';";
 
