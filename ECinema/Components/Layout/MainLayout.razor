@@ -21,9 +21,26 @@
     </MudItem>
     <MudSpacer />
     <MudItem Class="d-flex">
-        <MudButton Href="/profile" Variant="Variant.Text" Color="Color.Primary">
-            Profile
-        </MudButton>
+        <CascadingAuthenticationState>
+            <AuthorizeView>
+                <Authorized>
+                    <MudButton Href="/profile" Variant="Variant.Text" Color="Color.Primary">
+                        Profile
+                    </MudButton>
+                    <MudButton Href="/logout" Variant="Variant.Text" Color="Color.Secondary">
+                        Logout
+                    </MudButton>
+                </Authorized>
+                <NotAuthorized>
+                    <MudButton Href="/register" Variant="Variant.Text" Color="Color.Primary">
+                        Register
+                    </MudButton>
+                    <MudButton Href="/login" Variant="Variant.Text" Color="Color.Primary">
+                        Login
+                    </MudButton>
+                </NotAuthorized>
+            </AuthorizeView>
+        </CascadingAuthenticationState>
     </MudItem>
 </MudAppBar>
 @Body
@@ -34,6 +51,7 @@
     <a class="dismiss">🗙</a>
 </div>
 @code {
+    
     private MudTheme _theme = new();
     private bool _isDarkMode = true;
 }

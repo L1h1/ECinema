@@ -4,6 +4,9 @@ using ECinema.Data;
 using ECinema.Data.Repository;
 using Microsoft.AspNetCore.Connections;
 using MudBlazor.Services;
+using Blazored.LocalStorage;
+using ECinema;
+using Microsoft.AspNetCore.Components.Authorization;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,15 +19,31 @@ builder.Services.AddRazorComponents()
 
 
 builder.Services.AddData(builder.Configuration);
-
-
 var baseAddress = builder.Configuration.GetValue<string>("ApiSettings:BaseAddress");
 
-builder.Services.AddScoped(sp => new HttpClient
+builder.Services.AddSingleton<TokenState>();
+
+builder.Services.AddScoped<AuthorizedHttpClientHandler>();
+builder.Services.AddHttpClient("ECinema", client =>
 {
-    BaseAddress = new Uri(baseAddress)
-});
+    client.BaseAddress = new Uri(baseAddress);
+})
+    .AddHttpMessageHandler<AuthorizedHttpClientHandler>();
+
+builder.Services.AddScoped(sp => sp.GetRequiredService<IHttpClientFactory>()
+    .CreateClient("ECinema"));
+
+
+builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
+
+builder.Services.AddAuthenticationCore();
+
+
+
+
 builder.Services.AddMudServices();
+
+
 
 var app = builder.Build();
 

@@ -1,0 +1,60 @@
+﻿@page "/register"
+@using Blazored.LocalStorage
+@rendermode InteractiveServer
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject TokenState state
+<PageTitle>Login</PageTitle>
+
+<MudPaper Elevation="4" Class="p-4" Style="max-width: 400px; margin: auto; margin-top:100px;">
+    <MudText Typo="Typo.h5" Class="mb-4 justify-center">Register</MudText>
+    <MudTextField @bind-Value="email" Label="Email" ShrinkLabel Variant="Variant.Text" Margin="Margin.Dense" FullWidth="true" />
+    <MudTextField @bind-Value="password" Label="Password" ShrinkLabel Variant="Variant.Text" Margin="Margin.Dense" FullWidth="true" />
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3" FullWidth="true" OnClick="HandleLogin">Register</MudButton>
+
+    @if (errorMessage != null)
+    {
+        <MudAlert Severity="Severity.Error" Class="mt-3">@errorMessage</MudAlert>
+    }
+</MudPaper>
+
+@code {
+    private string email;
+    private string password;
+    private string errorMessage;
+
+
+    private async Task HandleLogin()
+    {
+        var loginRequest = new { UserName = email, Email = email, Password = password, RoleId = 1 };
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/users", loginRequest);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadAsStringAsync();
+                if (result != null)
+                {
+                   
+
+                    Navigation.NavigateTo("/");
+                }
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                errorMessage = errorContent;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred during register. Please try again.";
+        }
+    }
+
+    public class TokenResponse
+    {
+        public string Token { get; set; }
+    }
+}

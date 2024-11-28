@@ -1,0 +1,60 @@
+﻿@page "/login"
+@using Blazored.LocalStorage
+@rendermode InteractiveServer
+@inject HttpClient Http
+@inject NavigationManager Navigation
+@inject TokenState state
+<PageTitle>Login</PageTitle>
+
+<MudPaper Elevation="4" Class="p-4" Style="max-width: 400px; margin: auto; margin-top:100px;">
+    <MudText Typo="Typo.h5" Class="mb-4 justify-center">Login</MudText>
+    <MudTextField @bind-Value="email" Label="Email" ShrinkLabel Variant="Variant.Text" Margin="Margin.Dense" FullWidth="true" />
+    <MudTextField @bind-Value="password" Label="Password" ShrinkLabel Variant="Variant.Text" Margin="Margin.Dense" FullWidth="true"/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mt-3" FullWidth="true" OnClick="HandleLogin">Login</MudButton>
+
+    @if (errorMessage != null)
+    {
+        <MudAlert Severity="Severity.Error" Class="mt-3">@errorMessage</MudAlert>
+    }
+</MudPaper>
+
+@code {
+    private string email;
+    private string password;
+    private string errorMessage;
+
+
+    private async Task HandleLogin()
+    {
+        var loginRequest = new { Email = email, Password = password };
+
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/users/check-credentials", loginRequest);
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<TokenResponse>();
+                if (result != null)
+                {
+                    state.Token = result.Token;
+
+                    Navigation.NavigateTo("/");
+                }
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                errorMessage = errorContent;
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred during login. Please try again.";
+        }
+    }
+
+    public class TokenResponse
+    {
+        public string Token { get; set; }
+    }
+}

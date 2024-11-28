@@ -1,0 +1,86 @@
+﻿@rendermode InteractiveServer
+@inject TokenState state
+<MudCard Style="max-width: 200px; margin: auto;">
+    <MudCardContent>
+        <MudGrid>
+            <MudItem xs="8">
+                <MudText Typo="Typo.h6">Watched</MudText>
+            </MudItem>
+            <MudItem xs="4">
+                <MudCheckBox T="bool" Value="@isChecked" ValueChanged="@((bool b)=>HandleCheckChanged(b))" @ref="refCheck"/>
+            </MudItem>
+        </MudGrid>
+    </MudCardContent>
+</MudCard>
+
+@code {
+    [Parameter]
+    public int MovieId { get; set; } // Идентификатор фильма
+
+    [Inject]
+    private HttpClient Http { get; set; } = default!;
+
+    private bool isChecked;
+
+    private WatchHistory _historyInst;
+
+    MudCheckBox<bool> refCheck;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var userId = await GetCurrentUserId();
+        var response = await Http.GetAsync($"api/WatchHistory/user/{userId}");
+        if (response.IsSuccessStatusCode)
+        {
+            var watchHistory = await response.Content.ReadFromJsonAsync<List<WatchHistory>>();
+            if (watchHistory != null)
+            {
+                isChecked = watchHistory.Where(wh => wh.MovieId == MovieId).Count() > 0;
+
+            }
+
+            if (isChecked)
+            {
+                _historyInst = watchHistory.Where(wh => wh.MovieId == MovieId).First();
+            }
+        }
+    }
+
+    private async Task HandleCheckChanged(bool? v)
+    {
+        refCheck.Disabled = true;
+        var userId = await GetCurrentUserId();
+
+        isChecked = v.Value;
+        if (isChecked)
+        {
+            var watchHistoryEntry = new { UserId = userId, MovieId = MovieId, WatchedAt=DateTime.Now};
+            await Http.PostAsJsonAsync("api/WatchHistory", watchHistoryEntry);
+
+            var response = await Http.GetAsync($"api/WatchHistory/user/{userId}");
+            var watchHistory = await response.Content.ReadFromJsonAsync<List<WatchHistory>>();
+            _historyInst = watchHistory.Where(wh => wh.MovieId == MovieId).First();
+        }
+        else
+        {
+            var watchHistoryEntry = new { UserId = userId, WatchId = _historyInst.WatchId };
+
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"{Http.BaseAddress}api/WatchHistory")
+                {
+
+                    Content = JsonContent.Create(watchHistoryEntry)
+                };
+            await Http.SendAsync(request);
+        }
+
+
+        refCheck.Disabled = false;
+        StateHasChanged();
+    }
+
+    private async Task<int> GetCurrentUserId()
+    {
+
+        return state.UserId;
+    }
+}

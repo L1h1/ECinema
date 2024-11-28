@@ -10,7 +10,7 @@
                 {
                     <MudCard Style="min-width: 200px; flex-shrink: 0;" Class="mud-elevation-3">
                         <MudCardContent>
-                            <MudButton Variant="Variant.Text" Color="Color.Primary">
+                            <MudButton Href="@GetURL(actor.ActorId)" Variant="Variant.Text" Color="Color.Primary">
                                 @actor.ActorName
                             </MudButton>
                             <MudText Typo="Typo.subtitle1">@actor.DateOfBirth.Value.ToString("dd MMM yyyy")</MudText>
@@ -33,4 +33,6 @@
         Actors = await Http.GetFromJsonAsync<List<Actor>>($"api/actor/movie/{MovieId}");
 
     }
+
+    private string GetURL(int actorId) => $"/actor/{actorId}";
 }

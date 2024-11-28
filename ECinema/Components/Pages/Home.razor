@@ -1,4 +1,6 @@
 ﻿@page "/"
+@page "/actor/{ActorId:int}"
+@page "/cinema/{CinemaId:int}"
 @rendermode InteractiveServer
 @inject HttpClient Http
 
@@ -19,6 +21,12 @@
             <MudGrid>
             <MudItem Class="d-flex justify-center" xs="4">
                 <MudTextField @ref="RefEntryField" Class="mb-4" Label="Search" Variant="Variant.Text" FullWidth="true" @bind-Value="SearchQuery" OnKeyDown="@OnKeyDown" />
+                @if (ActorId != null)
+                {
+                    <MudText Typo="Typo.button">Filtered by actor</MudText>
+                }else if(CinemaId != null){
+                    <MudText Typo="Typo.button">Filtered by cinema</MudText>
+                }
             </MudItem>
             <MudFlexBreak />
                 <MudItem  Class="ml-2" xs="12"> 
@@ -32,7 +40,10 @@
     public string SearchQuery { get; set; }
     private List<Movie> movies = new List<Movie>();
     private MudTextField<string> RefEntryField;
+    [Parameter] public int? ActorId { get; set; }
+    [Parameter] public int? CinemaId { get; set; }
 
+    string token;
 
     private async Task OnSearch()
     {
@@ -61,11 +72,30 @@
             movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
         }
     }
-
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            
+        
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
-        movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+        if (ActorId != null)
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>($"api/movie/actor/{ActorId}");
+        }
+        else if (CinemaId != null)
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>($"api/movie/cinema/{CinemaId}");
+        }
+        else
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+        }
     }
+
 
     async Task OnKeyDown(KeyboardEventArgs args)
     {

@@ -1,0 +1,13 @@
+﻿@page "/logout"
+@inject TokenState state;
+@inject NavigationManager Navigation
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        state.Token = null;
+        state.UserId = 0;
+        state.Role = null;
+        Navigation.NavigateTo("/");
+        base.OnInitialized();
+    }
+}

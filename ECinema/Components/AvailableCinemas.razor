@@ -1,4 +1,5 @@
 ﻿@using MudBlazor
+@rendermode InteractiveServer
 @inject HttpClient Http
 @if (Cinemas != null)
 {
@@ -10,13 +11,16 @@
                 {
                     <MudCard Style="flex-shrink: 0;" Class="mud-elevation-3">
                         <MudCardContent>
-
-                            <MudButton Href="@cinema.WebsiteUrl" Variant="Variant.Text" Color="Color.Primary">
+                            <MudContainer>
+                                <MudButton Href="@cinema.WebsiteUrl" Variant="Variant.Text" Color="Color.Secondary">
                                 @cinema.CinemaName
                             </MudButton>
-@*                             <MudButton OnClick="@(()=>Navigate(cinema.CinemaId));" Variant="Variant.Text" Color="Color.Default">
+                             <MudButton Href="@GetURL(cinema.CinemaId)" Variant="Variant.Text" Color="Color.Primary">
                                 Other films
-                            </MudButton> *@
+                            </MudButton> 
+                            </MudContainer>
+                            
+                            
                         </MudCardContent>
                     </MudCard>
                 }
@@ -35,8 +39,5 @@
         Cinemas = await Http.GetFromJsonAsync<List<Cinema>>($"api/cinema/movie/{MovieId}");
     }
 
-    async Task Navigate(int cinemaId)
-    {
-        
-    }
+    private string GetURL(int cinemaId) => $"/cinema/{cinemaId}";
 }

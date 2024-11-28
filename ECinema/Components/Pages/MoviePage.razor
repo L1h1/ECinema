@@ -1,4 +1,5 @@
 ﻿@page "/movie/{MovieId:int}"
+
 @rendermode InteractiveServer
 @inject HttpClient Http
 
@@ -20,6 +21,16 @@ else
                         <MudText><b>Duration:</b> @movie.DurationMinutes minutes</MudText>
                     </MudCardContent>
                 </MudCard>
+                    <CascadingAuthenticationState>
+                        <AuthorizeView>
+                            <Authorized>
+                                <WatchHistoryCheck MovieId="@MovieId" />
+                            </Authorized>
+                            <NotAuthorized>
+
+                            </NotAuthorized>
+                        </AuthorizeView>
+                    </CascadingAuthenticationState>
             </MudItem>
             <MudItem xs="12" sm="6" md="8" >
                 <MudCard Style="height:500px">
@@ -30,7 +41,7 @@ else
                 </MudItem>
 
                 <MudItem xs="12" sm="6" md="4">
-
+                    
                 </MudItem>
 
                 <MudItem xs="12" sm="6" md="8">
@@ -60,8 +71,13 @@ else
 
                 </MudItem>
                 <MudItem xs="12" sm="6" md="8">
-                    <!-- Написать отзыв -->
-                    <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview" />
+                    @* <CascadingAuthenticationState>
+                        <AuthorizeView> *@
+                            <!-- Написать отзыв -->
+                            <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview" />
+                       @*  </AuthorizeView>
+                    </CascadingAuthenticationState> *@
+                    
                     <!-- Отзывы -->
                     <ReviewsComponent MovieId="@MovieId" @ref="refComp" />
                 </MudItem>
@@ -80,7 +96,6 @@ else
     protected override async Task OnInitializedAsync()
     {
         movie = await Http.GetFromJsonAsync<Movie>($"api/movie/{MovieId}");
-        StateHasChanged();
     }
     private string GetURI(int id) => $"/Posters/{id}.png";
 
