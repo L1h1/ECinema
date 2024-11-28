@@ -17,8 +17,9 @@ namespace ECinema.Data.Queries
         WHERE WatchId = @WatchId;";
 
         public static string SelectWatchHistoryByUserQuery = @"
-        SELECT WatchId, UserId, MovieId, WatchedAt 
-        FROM WatchHistory 
+        SELECT wh.WatchId, wh.UserId, wh.MovieId, wh.WatchedAt, m.Title 
+        FROM WatchHistory wh 
+        INNER JOIN Movies m ON wh.MovieId = m.MovieId
         WHERE UserId = @UserId;";
 
     }

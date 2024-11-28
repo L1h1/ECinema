@@ -33,7 +33,8 @@ namespace ECinema.Data.MediatR.WatchHistory
                     WatchId = (int)reader["WatchId"],
                     UserId = (int)reader["UserId"],
                     MovieId = (int)reader["MovieId"],
-                    WatchedAt = (DateTime)reader["WatchedAt"]
+                    WatchedAt = (DateTime)reader["WatchedAt"],
+                    Title = (string)reader["Title"],
                 };
 
                 watchHistoryList.Add(watchHistory);

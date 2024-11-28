@@ -1,0 +1,111 @@
+﻿@page "/profile"
+@rendermode InteractiveServer
+<MudContainer MaxWidth="MaxWidth.Large" Style="margin-top:100px;">
+    <MudGrid Spacing="3" Class="mt-40">
+        <!-- Сектор 1: Основная информация -->
+        <MudItem xs="12" sm="12" md="12" Class="mt-40">
+            <MudPaper Elevation="3" Class="pa-4">
+                <MudText Class="mt-40" Typo="Typo.h6" GutterBottom="true">INFO</MudText>
+                <MudText Typo="Typo.body1">Name: @user?.Username</MudText>
+                <MudText Typo="Typo.body1">Email: @user?.Email</MudText>
+                <MudText Typo="Typo.body1">Member since: @user?.CreatedAt.ToString("dd MMM yyyy")</MudText>
+            </MudPaper>
+        </MudItem>
+
+        <!-- Сектор 2: Панель изменения данных -->
+        <MudItem xs="12" sm="12" md="12">
+            <MudPaper Elevation="3" Class="pa-4">
+                <MudText Typo="Typo.h6" GutterBottom="true">Account management</MudText>
+
+                <!-- Изменение Email -->
+                <MudTextField @bind-Value="_newEmail" ShrinkLabel Label="New Mail" FullWidth="true" Variant="Variant.Filled" />
+                <MudButton OnClick="UpdateEmail" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                    Save Email
+                </MudButton>
+
+                <!-- Изменение пароля -->
+                <MudTextField @bind-Value="_newPassword" ShrinkLabel Label="New password" FullWidth="true" Variant="Variant.Filled" />
+                <MudButton OnClick="UpdatePassword" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                    Save Password
+                </MudButton>
+            </MudPaper>
+        </MudItem>
+
+        <!-- Сектор 3: История просмотров -->
+        <MudItem xs="12" sm="12" md="12">
+            <MudPaper Elevation="3" Class="pa-4">
+                <MudText Typo="Typo.h6" GutterBottom="true">Watch History</MudText>
+                @if (watchHistory != null && watchHistory.Any())
+                {
+                    <MudList T="WatchHistory">
+                        @foreach (var history in watchHistory)
+                        {
+                            <MudListItem>
+                                <MudLink Href="@GetURL(history.MovieId)">@history.Title</MudLink>
+                            </MudListItem>
+                        }
+                    </MudList>
+                }
+                else
+                {
+                    <MudText Typo="Typo.body2">Watch history is empty</MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</MudContainer>
+
+@code {
+    [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private TokenState State { get; set; } = default!;
+
+    private User? user;
+    private List<WatchHistory> watchHistory = new();
+    private string _newEmail = string.Empty;
+    private string _newPassword = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadUserData();
+        await LoadWatchHistory();
+    }
+
+    private async Task LoadUserData()
+    {
+        var response = await Http.GetAsync($"api/users/{State.UserId}");
+        if (response.IsSuccessStatusCode)
+        {
+            user = await response.Content.ReadFromJsonAsync<User>();
+        }
+    }
+
+    private async Task LoadWatchHistory()
+    {
+        var response = await Http.GetAsync($"api/WatchHistory/user/{State.UserId}");
+        if (response.IsSuccessStatusCode)
+        {
+            watchHistory = await response.Content.ReadFromJsonAsync<List<WatchHistory>>() ?? new List<WatchHistory>();
+        }
+    }
+
+    private async Task UpdateEmail()
+    {
+        var response = await Http.PutAsJsonAsync("api/users/email", new { UserId = State.UserId, NewEmail = _newEmail });
+        if (response.IsSuccessStatusCode)
+        {
+            await LoadUserData();
+        }
+    }
+
+    private async Task UpdatePassword()
+    {
+        var response = await Http.PutAsJsonAsync("api/users/password", new { UserId = State.UserId, NewPassword = _newPassword });
+        if (response.IsSuccessStatusCode)
+        {
+            _newPassword = string.Empty; // Сбрасываем поле пароля
+        }
+    }
+
+
+    private string GetURL(int MovieId) => $"/movie/{MovieId}";
+}

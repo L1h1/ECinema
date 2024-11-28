@@ -12,6 +12,7 @@ namespace ECinema.Data.Entities
 
         public int UserId { get; set; }
 
+        public string Title { get; set; }
         public int MovieId { get; set; }
 
         public DateTime WatchedAt { get; set; }
