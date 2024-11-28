@@ -3,7 +3,7 @@ using System.Reflection;
 using ECinema.Data;
 using ECinema.Data.Repository;
 using Microsoft.AspNetCore.Connections;
-
+using MudBlazor.Services;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +16,15 @@ builder.Services.AddRazorComponents()
 
 
 builder.Services.AddData(builder.Configuration);
+
+
+var baseAddress = builder.Configuration.GetValue<string>("ApiSettings:BaseAddress");
+
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri(baseAddress)
+});
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 
@@ -33,7 +42,6 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 
 
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
@@ -42,7 +50,7 @@ app.MapRazorComponents<App>()
 //Наполнение тестовыми данными
 //await DbInitializer.SeedData(app.Services);
 
-
+app.UseStaticFiles();
 
 
 app.Run();

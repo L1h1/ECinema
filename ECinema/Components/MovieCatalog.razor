@@ -1,0 +1,11 @@
+﻿@rendermode InteractiveServer
+@code {
+    [Parameter] public List<Movie> Movies { get; set; }
+}
+
+<MudGrid>
+    @foreach (var movie in Movies)
+    {
+        <MovieCard MovieId="@movie.MovieId" Title="@movie.Title" Description="@movie.Description" Year="@movie.ReleaseYear"></MovieCard>
+    }
+</MudGrid>

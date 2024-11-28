@@ -1,1 +1,79 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject HttpClient Http
+
+<PageTitle>Catalog</PageTitle>
+
+
+
+<MudContainer>
+    <!-- Сайдбар с жанрами -->
+    <MudDrawer Anchor="Anchor.Left" Open="true" Elevation="1" Variant="DrawerVariant.Persistent">
+        <MudDrawerContainer>
+            <GenreFilter OnFilterByGenre="OnFilterByGenre" />
+        </MudDrawerContainer>
+    </MudDrawer>
+     
+    <!-- Основной контент (поиск и фильмы) -->
+    <MudMainContent Class="ma-4">
+            <MudGrid>
+            <MudItem Class="d-flex justify-center" xs="4">
+                <MudTextField @ref="RefEntryField" Class="mb-4" Label="Search" Variant="Variant.Text" FullWidth="true" @bind-Value="SearchQuery" OnKeyDown="@OnKeyDown" />
+            </MudItem>
+            <MudFlexBreak />
+                <MudItem  Class="ml-2" xs="12"> 
+                <MovieCatalog Movies="movies" />
+                </MudItem>
+            </MudGrid>   
+    </MudMainContent>
+</MudContainer>
+
+@code {
+    public string SearchQuery { get; set; }
+    private List<Movie> movies = new List<Movie>();
+    private MudTextField<string> RefEntryField;
+
+
+    private async Task OnSearch()
+    {
+        await RefEntryField.BlurAsync();
+
+        if (!string.IsNullOrEmpty(SearchQuery))
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>($"api/movie/title/{SearchQuery}");
+        }
+        else
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+        }
+
+        await RefEntryField.FocusAsync();
+    }
+
+    private async Task OnFilterByGenre(int genreId)
+    {
+        if (genreId != 0)
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>($"api/movie/genre/{genreId}");
+        }
+        else
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+    }
+
+    async Task OnKeyDown(KeyboardEventArgs args)
+    {
+        if (args.Key == "Enter")
+        {
+            await OnSearch();
+        }
+        
+    }
+
+}

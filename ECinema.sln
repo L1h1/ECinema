@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECinema", "ECinema\ECinema.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECinema.Data", "ECinema.Data\ECinema.Data.csproj", "{2403F3BE-AEEE-487B-8ECA-947E8306CA1B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECinema.API", "ECinema.API\ECinema.API.csproj", "{A2351BB2-7C75-4C66-9339-7690E5C25ACD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ECinema.API", "ECinema.API\ECinema.API.csproj", "{A2351BB2-7C75-4C66-9339-7690E5C25ACD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,23 +1,39 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
 
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
-</div>
+@* Required *@
+<MudThemeProvider @bind-IsDarkMode="_isDarkMode" Theme="_theme" />
+<MudPopoverProvider />
+
+@* Needed for dialogs *@
+<MudDialogProvider />
+
+@* Needed for snackbars *@
+<MudSnackbarProvider />
+
+<MudAppBar Position="MudBlazor.Position.Top" Class="d-flex justify-space-between flex-grow-1 gap-4" Elevation="0" Dense>
+
+    <MudItem>
+        <MudButton Href="/" Variant="Variant.Text" Color="Color.Primary">
+            ECinema
+        </MudButton>
+    </MudItem>
+    <MudSpacer />
+    <MudItem Class="d-flex">
+        <MudButton Href="/profile" Variant="Variant.Text" Color="Color.Primary">
+            Profile
+        </MudButton>
+    </MudItem>
+</MudAppBar>
+@Body
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
     <a href="" class="reload">Reload</a>
     <a class="dismiss">🗙</a>
 </div>
+@code {
+    private MudTheme _theme = new();
+    private bool _isDarkMode = true;
+}

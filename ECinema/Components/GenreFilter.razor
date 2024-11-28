@@ -1,0 +1,31 @@
+﻿@inject HttpClient Http
+
+@code {
+    private List<Genre> genres = new List<Genre>();
+    private int selectedGenreId;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Получаем список жанров из API
+        genres = await Http.GetFromJsonAsync<List<Genre>>("api/genres");
+        genres.Insert(0, new Genre() { GenreId = 0, GenreName = "All" });
+    }
+
+    private async Task OnGenreChange(int genreId)
+    {
+        selectedGenreId = genreId;
+        await OnFilterByGenre.InvokeAsync(selectedGenreId);
+    }
+
+    [Parameter] public EventCallback<int> OnFilterByGenre { get; set; }
+}
+
+<MudList T="Genre" Class="ml-4 mt-8">
+    @foreach (var genre in genres)
+    {
+        <MudListItem OnClick="() => OnGenreChange(genre.GenreId)">
+            @genre.GenreName
+        </MudListItem>
+    }
+</MudList>
+

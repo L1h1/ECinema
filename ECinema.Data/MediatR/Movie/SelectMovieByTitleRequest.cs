@@ -3,7 +3,7 @@ using MediatR;
 
 namespace ECinema.Data.MediatR.Movie
 {
-    public class SelectMovieByTitleRequest : IRequest<Entities.Movie>
+    public class SelectMovieByTitleRequest : IRequest<List<Entities.Movie>>
     {
         public string Title { get; set; }
     }

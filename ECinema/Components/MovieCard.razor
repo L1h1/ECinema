@@ -1,0 +1,27 @@
+﻿@rendermode InteractiveServer
+<MudCard Class="ml-4 mt-4" Style="width:200px">
+    <MudCardMedia Image="@GetURI(MovieId)" Title="@Title" Height="300"/>
+    <MudCardContent >
+        <MudText Typo="Typo.button">@Title</MudText>
+        <MudText Typo="Typo.subtitle1">@Year</MudText>
+    </MudCardContent>
+    <MudCardActions>
+        <MudButton Variant="Variant.Text" OnClick="NavigateToDetails">Watch</MudButton>
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter] public int MovieId { get; set; }
+    [Parameter] public string Title { get; set; }
+    [Parameter] public string Description { get; set; }
+    [Parameter] public int Year { get; set; }
+
+    private void NavigateToDetails()
+    {
+        NavigationManager.NavigateTo($"movie/{MovieId}");
+    }
+
+    [Inject] private NavigationManager NavigationManager { get; set; }
+
+    private string GetURI(int id) => $"/Posters/{id}.png";
+}

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECinema.Data.MediatR.Movie
 {
-    public class SelectMovieByTitleRequestHandler : IRequestHandler<SelectMovieByTitleRequest, Entities.Movie>
+    public class SelectMovieByTitleRequestHandler : IRequestHandler<SelectMovieByTitleRequest, List<Entities.Movie>>
     {
         private readonly MySqlConnection _connection;
 
@@ -16,22 +16,22 @@ namespace ECinema.Data.MediatR.Movie
             _connection = connection;
         }
 
-        public async Task<Entities.Movie> Handle(SelectMovieByTitleRequest request, CancellationToken cancellationToken)
+        public async Task<List<Entities.Movie>> Handle(SelectMovieByTitleRequest request, CancellationToken cancellationToken)
         {
             await _connection.OpenAsync(cancellationToken);
 
             var query = MovieQueries.SelectMovieByNameQuery;
 
-
+            query = query.Replace("@Title", request.Title);
             using var command = new MySqlCommand(query, _connection);
-            command.Parameters.AddWithValue("@Title", request.Title);
+
             using var reader = await command.ExecuteReaderAsync(cancellationToken);
 
-            Entities.Movie movie = null;
+            List<Entities.Movie> movies = new();
 
-            if (await reader.ReadAsync(cancellationToken))
+            while (await reader.ReadAsync(cancellationToken))
             {
-                movie = new Entities.Movie
+                movies.Add(new Entities.Movie
                 {
                     MovieId = (int)reader["MovieId"],
                     Title = (string)reader["Title"],
@@ -39,12 +39,13 @@ namespace ECinema.Data.MediatR.Movie
                     ReleaseYear = (int)reader["ReleaseYear"],
                     DurationMinutes = (int)reader["DurationMinutes"],
                     CreatedAt = (DateTime)reader["CreatedAt"]
-                };
+                });
             }
+
 
             await _connection.CloseAsync();
 
-            return movie;
+            return movies;
         }
     }
 }
