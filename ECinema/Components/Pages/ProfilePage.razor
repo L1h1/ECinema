@@ -1,59 +1,67 @@
 ﻿@page "/profile"
+
 @rendermode InteractiveServer
-<MudContainer MaxWidth="MaxWidth.Large" Style="margin-top:100px;">
-    <MudGrid Spacing="3" Class="mt-40">
-        <!-- Сектор 1: Основная информация -->
-        <MudItem xs="12" sm="12" md="12" Class="mt-40">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Class="mt-40" Typo="Typo.h6" GutterBottom="true">INFO</MudText>
-                <MudText Typo="Typo.body1">Name: @user?.Username</MudText>
-                <MudText Typo="Typo.body1">Email: @user?.Email</MudText>
-                <MudText Typo="Typo.body1">Member since: @user?.CreatedAt.ToString("dd MMM yyyy")</MudText>
-            </MudPaper>
-        </MudItem>
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
 
-        <!-- Сектор 2: Панель изменения данных -->
-        <MudItem xs="12" sm="12" md="12">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" GutterBottom="true">Account management</MudText>
+            <MudContainer MaxWidth="MaxWidth.Large" Style="margin-top:100px;">
+                <MudGrid Spacing="3" Class="mt-40">
+                    <!-- Сектор 1: Основная информация -->
+                    <MudItem xs="12" sm="12" md="12" Class="mt-40">
+                        <MudPaper Elevation="3" Class="pa-4">
+                            <MudText Class="mt-40" Typo="Typo.h6" GutterBottom="true">INFO</MudText>
+                            <MudText Typo="Typo.body1">Name: @user?.Username</MudText>
+                            <MudText Typo="Typo.body1">Email: @user?.Email</MudText>
+                            <MudText Typo="Typo.body1">Member since: @user?.CreatedAt.ToString("dd MMM yyyy")</MudText>
+                        </MudPaper>
+                    </MudItem>
 
-                <!-- Изменение Email -->
-                <MudTextField @bind-Value="_newEmail" ShrinkLabel Label="New Mail" FullWidth="true" Variant="Variant.Filled" />
-                <MudButton OnClick="UpdateEmail" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
-                    Save Email
-                </MudButton>
+                    <!-- Сектор 2: Панель изменения данных -->
+                    <MudItem xs="12" sm="12" md="12">
+                        <MudPaper Elevation="3" Class="pa-4">
+                            <MudText Typo="Typo.h6" GutterBottom="true">Account management</MudText>
 
-                <!-- Изменение пароля -->
-                <MudTextField @bind-Value="_newPassword" ShrinkLabel Label="New password" FullWidth="true" Variant="Variant.Filled" />
-                <MudButton OnClick="UpdatePassword" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
-                    Save Password
-                </MudButton>
-            </MudPaper>
-        </MudItem>
+                            <!-- Изменение Email -->
+                            <MudTextField @bind-Value="_newEmail" ShrinkLabel Label="New Mail" FullWidth="true" Variant="Variant.Filled" />
+                            <MudButton OnClick="UpdateEmail" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                Save Email
+                            </MudButton>
 
-        <!-- Сектор 3: История просмотров -->
-        <MudItem xs="12" sm="12" md="12">
-            <MudPaper Elevation="3" Class="pa-4">
-                <MudText Typo="Typo.h6" GutterBottom="true">Watch History</MudText>
-                @if (watchHistory != null && watchHistory.Any())
-                {
-                    <MudList T="WatchHistory">
-                        @foreach (var history in watchHistory)
-                        {
-                            <MudListItem>
-                                <MudLink Href="@GetURL(history.MovieId)">@history.Title</MudLink>
-                            </MudListItem>
-                        }
-                    </MudList>
-                }
-                else
-                {
-                    <MudText Typo="Typo.body2">Watch history is empty</MudText>
-                }
-            </MudPaper>
-        </MudItem>
-    </MudGrid>
-</MudContainer>
+                            <!-- Изменение пароля -->
+                            <MudTextField @bind-Value="_newPassword" ShrinkLabel Label="New password" FullWidth="true" Variant="Variant.Filled" />
+                            <MudButton OnClick="UpdatePassword" Variant="Variant.Filled" Color="Color.Primary" Class="mt-2">
+                                Save Password
+                            </MudButton>
+                        </MudPaper>
+                    </MudItem>
+
+                    <!-- Сектор 3: История просмотров -->
+                    <MudItem xs="12" sm="12" md="12">
+                        <MudPaper Elevation="3" Class="pa-4">
+                            <MudText Typo="Typo.h6" GutterBottom="true">Watch History</MudText>
+                            @if (watchHistory != null && watchHistory.Any())
+                            {
+                                <MudList T="WatchHistory">
+                                    @foreach (var history in watchHistory)
+                                    {
+                                        <MudListItem>
+                                            <MudLink Href="@GetURL(history.MovieId)">@history.Title</MudLink>
+                                        </MudListItem>
+                                    }
+                                </MudList>
+                            }
+                            else
+                            {
+                                <MudText Typo="Typo.body2">Watch history is empty</MudText>
+                            }
+                        </MudPaper>
+                    </MudItem>
+                </MudGrid>
+            </MudContainer>
+        </Authorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
 
 @code {
     [Inject] private HttpClient Http { get; set; } = default!;

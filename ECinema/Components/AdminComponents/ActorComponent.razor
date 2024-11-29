@@ -1,0 +1,108 @@
+﻿@rendermode InteractiveServer
+@inject HttpClient Http
+<MudCard>
+    <MudCardHeader>
+        <MudText Typo="Typo.h5">Actors Management</MudText>
+    </MudCardHeader>
+
+    <MudCardContent>
+        <!-- Список актеров -->
+        <MudTable Items="_actors" Dense="true">
+            <HeaderContent>
+                <MudTh>Name</MudTh>
+                <MudTh>Birth Date</MudTh>
+                <MudTh>Bio</MudTh>
+                <MudTh>Actions</MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd>@context.ActorName</MudTd>
+                <MudTd>@context.DateOfBirth?.ToString("dd MMM yyyy")</MudTd>
+                <MudTd>@context.Bio</MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Text" Color="Color.Primary" OnClick="() => EditActor(context)">Edit</MudButton>
+                    <MudButton Variant="Variant.Text" Color="Color.Error" OnClick="() => DeleteActor(context.ActorId)">Delete</MudButton>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudCardContent>
+
+    <MudCardActions>
+        <MudButton Color="Color.Primary" Variant="Variant.Filled" OnClick="ShowAddActorDialog">Add Actor</MudButton>
+    </MudCardActions>
+
+    <!-- Диалог для добавления/редактирования актера -->
+    <MudDialog Visible="_isDialogVisible">
+    <MudDialogTitle>@(_isEditing ? "Edit Actor" : "Add Actor")</MudDialogTitle>
+    <MudDialogContent>
+        <MudTextField Label="Name" Value="_actorModel.ActorName" Required="true" />
+        <MudTextField Label="Birth Date" Value="_actorModel.DateOfBirth" InputType="InputType.Date" Required="true" />
+            <MudTextField Label="Bio" Value="_actorModel.Bio" Required="true" />
+    </MudDialogContent>
+    <MudDialogActions>
+        <MudButton Color="Color.Primary" OnClick="SaveActor">Save</MudButton>
+        <MudButton Color="Color.Secondary" OnClick="CloseDialog">Cancel</MudButton>
+    </MudDialogActions>
+</MudDialog>
+</MudCard>
+
+@code {
+    private List<Data.Entities.Actor> _actors = new();
+    private bool _isDialogVisible = false;
+    private bool _isEditing = false;
+    private Actor _actorModel = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadActors();
+    }
+
+    private async Task LoadActors()
+    {
+        var response = await Http.GetFromJsonAsync<List<Actor>>("api/actor");
+        if (response is not null)
+        {
+            _actors = response;
+        }
+    }
+
+    private void ShowAddActorDialog()
+    {
+        _isEditing = false;
+        _actorModel = new Actor();
+        _isDialogVisible = true;
+    }
+
+    private void EditActor(Actor actor)
+    {
+        _isEditing = true;
+        _actorModel = actor;
+        _isDialogVisible = true;
+    }
+
+    private async Task SaveActor()
+    {
+        if (_isEditing)
+        {
+            await Http.PutAsJsonAsync("api/actor", _actorModel);
+        }
+        else
+        {
+            await Http.PostAsJsonAsync("api/actor", _actorModel);
+        }
+
+        _isDialogVisible = false;
+        await LoadActors();
+    }
+
+    private async Task DeleteActor(int actorId)
+    {
+        await Http.DeleteAsync($"api/actor/{actorId}");
+        await LoadActors();
+    }
+
+    private void CloseDialog()
+    {
+        _isDialogVisible = false;
+    }
+
+}

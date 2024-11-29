@@ -1,0 +1,19 @@
+﻿@page "/admin"
+@inject TokenState State
+@rendermode InteractiveServer
+<CascadingAuthenticationState>
+    <AuthorizeView>
+        <Authorized>
+            @if (State.Role == "Admin")
+            {
+                
+            }
+        </Authorized>
+    </AuthorizeView>
+
+</CascadingAuthenticationState>
+
+
+@code {
+    
+}

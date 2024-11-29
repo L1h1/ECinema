@@ -1,5 +1,5 @@
 ﻿@inherits LayoutComponentBase
-
+@inject TokenState state
 
 
 @* Required *@
@@ -24,6 +24,12 @@
         <CascadingAuthenticationState>
             <AuthorizeView>
                 <Authorized>
+                    @if (state.Role == "Admin")
+                    {
+                        <MudButton Href="/admin" Variant="Variant.Text" Color="Color.Error">
+                            Admin
+                        </MudButton>
+                    }
                     <MudButton Href="/profile" Variant="Variant.Text" Color="Color.Primary">
                         Profile
                     </MudButton>
