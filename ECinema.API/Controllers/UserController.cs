@@ -74,17 +74,23 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> InsertUser([FromBody] InsertUserRequest request)
     {
 
-        var isAdmin = User.IsInRole("Admin");
-
-        if(!isAdmin && request.RoleId != 1) 
+        try
         {
-            return Forbid();
-        }
+            var isAdmin = User.IsInRole("Admin");
 
-        var result = await _mediator.Send(request);
-        if (result)
-            return Ok(result);
-        return BadRequest();
+            if (!isAdmin && request.RoleId != 1)
+            {
+                return Forbid();
+            }
+
+            var result = await _mediator.Send(request);
+            if (result)
+                return Ok(result);
+            return BadRequest();
+        }catch(Exception ex)
+        {
+            return BadRequest();
+        }
     }
 
     [Authorize(Roles ="Admin")]
