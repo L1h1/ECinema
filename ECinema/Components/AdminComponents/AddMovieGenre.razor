@@ -1,0 +1,50 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudForm>
+    <MudTextField T="int" @bind-Value="genreMovie.MovieId" Label="Movie ID" Required="true" />
+    <MudTextField T="int" @bind-Value="genreMovie.GenreId" Label="Genre ID" Required="true" />
+
+    <MudButton OnClick="AddMovieGenreHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+        Add Genre to Movie
+    </MudButton>
+</MudForm>
+
+@if (isGenreAdded)
+{
+    <MudText Typo="Typo.body1" Color="Color.Success">Genre Added to Movie!</MudText>
+}
+
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error">Error adding genre to movie.</MudText>
+}
+
+@code {
+    private (int MovieId, int GenreId) genreMovie = new();
+    private bool isGenreAdded = false;
+    private bool isError = false;
+
+    private async Task AddMovieGenreHandler()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/movie/genre", new { MovieId = genreMovie.MovieId, GenreId = genreMovie.GenreId });
+            if (response.IsSuccessStatusCode)
+            {
+                isGenreAdded = true;
+                isError = false;
+                genreMovie = new(); // Reset form
+            }
+            else
+            {
+                isGenreAdded = false;
+                isError = true;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+        }
+    }
+}

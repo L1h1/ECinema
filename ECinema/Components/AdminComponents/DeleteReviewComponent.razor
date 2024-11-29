@@ -1,0 +1,55 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField @bind-Value="reviewIdToDelete" Label="Review ID to Delete" Variant="Variant.Filled" />
+<MudButton OnClick="DeleteReviewHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Delete Review
+</MudButton>
+
+@if (isSuccess)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Review deleted successfully!</MudText>
+}
+
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to delete review.</MudText>
+}
+
+@code {
+    private int reviewIdToDelete;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task DeleteReviewHandler()
+    {
+        try
+        {
+            
+            var request = new HttpRequestMessage(HttpMethod.Delete, $"api/review")
+                {
+
+                    Content = JsonContent.Create(new { userId = 0, reviewId = reviewIdToDelete })
+                };
+
+            var response = await Http.SendAsync(request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                isSuccess = true;
+                isError = false;
+                reviewIdToDelete = 0;
+            }
+            else
+            {
+                isSuccess = false;
+                isError = true;
+            }
+        }
+        catch (Exception)
+        {
+            isSuccess = false;
+            isError = true;
+        }
+    }
+}

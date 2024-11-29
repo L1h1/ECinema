@@ -90,7 +90,7 @@ namespace ECinema.Data.Queries
         SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt,m.TrailerUrl 
         FROM Movies m
         INNER JOIN MovieCinemas mc ON m.MovieId = mc.MovieId
-        WHERE mc.MovieId = @MovieId;";
+        WHERE mc.CinemaId = @CinemaId;";
 
 
         /// <summary>

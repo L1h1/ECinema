@@ -1,0 +1,41 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudTextField T="int" @bind-Value="userId" Label="User ID" Required="true" />
+<MudTextField T="string" @bind-Value="newEmail" Label="New Email" Required="true" />
+
+<MudButton OnClick="UpdateUserEmail" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Update Email
+</MudButton>
+
+@if (isSuccess)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Email updated successfully!</MudText>
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error" Class="mt-4">Failed to update email.</MudText>
+}
+
+@code {
+    private int userId;
+    private string newEmail;
+    private bool isSuccess;
+    private bool isError;
+
+    private async Task UpdateUserEmail()
+    {
+        var request = new { UserId = userId, newEmail = newEmail };
+        var response = await Http.PutAsJsonAsync("api/users/email", request);
+
+        if (response.IsSuccessStatusCode)
+        {
+            isSuccess = true;
+            isError = false;
+        }
+        else
+        {
+            isSuccess = false;
+            isError = true;
+        }
+    }
+}

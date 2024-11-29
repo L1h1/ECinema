@@ -1,0 +1,50 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField T="int" @bind-Value="userId" Label="User ID" Required="true" />
+
+<MudButton OnClick="GetWatchHistory" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get Watch History
+</MudButton>
+
+@if (watchHistory.Any())
+{
+    <MudTable Items="watchHistory" Dense="true" Hover="true">
+        <HeaderContent>
+            <MudTh>Watch ID</MudTh>
+            <MudTh>Movie ID</MudTh>
+            <MudTh>Watch Time</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.WatchId</MudTd>
+            <MudTd>@context.MovieId</MudTd>
+            <MudTd>@context.WatchedAt.ToString()</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error" Class="mt-4">Watch history not found or access denied.</MudText>
+}
+
+@code {
+    private int userId;
+    private List<WatchHistory> watchHistory = new();
+    private bool isError;
+
+    private async Task GetWatchHistory()
+    {
+        var response = await Http.GetFromJsonAsync<List<WatchHistory>>($"api/watchhistory/user/{userId}");
+
+        if (response != null && response.Any())
+        {
+            watchHistory = response;
+            isError = false;
+        }
+        else
+        {
+            isError = true;
+            watchHistory.Clear();
+        }
+    }
+}

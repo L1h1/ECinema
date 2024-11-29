@@ -1,0 +1,59 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider/>
+<MudSelect T="string" @bind-Value="actionType" Label="Select Action Type" Variant="Variant.Filled">
+    <MudSelectItem Value="@("GET")">GET</MudSelectItem>
+    <MudSelectItem Value="@("POST")">POST</MudSelectItem>
+    <MudSelectItem Value="@("PUT")">PUT</MudSelectItem>
+    <MudSelectItem Value="@("DELETE")">DELETE</MudSelectItem>
+</MudSelect>
+
+<MudButton OnClick="GetUserActionLogsByActionTypeHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get User Action Logs by Action Type
+</MudButton>
+
+@if (userActionLogsByType.Count > 0)
+{
+    <MudTable Items="userActionLogsByType" Dense="true" Hover="true">
+        <HeaderContent>
+            <MudTh>Log ID</MudTh>
+            <MudTh>User ID</MudTh>
+            <MudTh>Action Type</MudTh>
+            <MudTh>Timestamp</MudTh>
+            <MudTh>Details</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.LogId</MudTd>
+            <MudTd>@context.UserId</MudTd>
+            <MudTd>@context.ActionType</MudTd>
+            <MudTd>@context.ActionTime.ToString("g")</MudTd>
+            <MudTd>@context.ActionDetails</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <MudText Typo="Typo.body1" Color="Color.Secondary">No logs found for the selected action type.</MudText>
+}
+
+@code {
+    private string actionType = "GET"; // Default to GET
+    private List<UserActionLog> userActionLogsByType = new();
+
+    private async Task GetUserActionLogsByActionTypeHandler()
+    {
+        if (string.IsNullOrEmpty(actionType))
+        {
+            
+            return;
+        }
+
+        var response = await Http.GetFromJsonAsync<List<UserActionLog>>($"api/useractionslog/by-action-type/{actionType}");
+
+        if (response != null)
+        {
+            userActionLogsByType = response;
+        }
+    }
+}

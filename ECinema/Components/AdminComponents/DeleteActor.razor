@@ -1,0 +1,71 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudCard Style="max-width: 600px;">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Delete Actor</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField ShrinkLabel @bind-Value="actorIdToDelete" Label="Actor ID to Delete" Variant="Variant.Filled" />
+
+        <MudButton OnClick="DeleteActorHandler" Variant="Variant.Filled" Color="Color.Error" Class="mt-4">
+            Delete Actor
+        </MudButton>
+        @if (isSuccess)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Actor deleted successfully!</MudText>
+        }
+        @if (isError)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to delete actor.</MudText>
+        }
+    </MudCardContent>
+</MudCard>
+
+
+
+
+
+@code {
+    private string actorIdToDelete = string.Empty;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task DeleteActorHandler()
+    {
+        try
+        {
+            if (int.TryParse(actorIdToDelete, out int actorId))
+            {
+                var response = await Http.DeleteAsync($"api/actor/{actorId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    
+                    isSuccess = true;
+                    isError = false;
+                    actorIdToDelete = string.Empty; 
+                }
+                else
+                {
+                    
+                    isError = true;
+                    isSuccess = false;
+                }
+            }
+            else
+            {
+                
+                isError = true;
+                isSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

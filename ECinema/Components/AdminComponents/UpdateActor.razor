@@ -1,0 +1,67 @@
+﻿@inject HttpClient Http
+
+<MudPopoverProvider/>
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h5">Update Actor</MudText>
+    <MudStack Spacing="3">
+        <MudTextField Label="Actor ID" @bind-Value="ActorIdInput" Immediate="true" />
+        <MudTextField Label="Actor Name" @bind-Value="ActorName" />
+        <MudDatePicker Label="Date of Birth" @bind-Date="DateOfBirth" />
+        <MudTextField Label="Bio" @bind-Value="Bio" Multiline="true" Rows="4" />
+
+        <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="UpdateActorAsync">Update Actor</MudButton>
+        @if (!string.IsNullOrEmpty(ResponseMessage))
+        {
+            <MudText Color="Color.Primary">@ResponseMessage</MudText>
+        }
+    </MudStack>
+</MudPaper>
+
+@code {
+    private int ActorIdInput;
+    private string ActorName;
+    private DateTime? DateOfBirth; // Nullable для обработки отсутствия даты
+    private string Bio;
+    private string ResponseMessage;
+
+    private async Task UpdateActorAsync()
+    {
+        if (ActorIdInput <= 0)
+        {
+            ResponseMessage = "Actor ID is required.";
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(ActorName))
+        {
+            ResponseMessage = "Actor name cannot be empty.";
+            return;
+        }
+
+        try
+        {
+            var request = new
+            {
+                ActorId = ActorIdInput,
+                ActorName = ActorName,
+                DateOfBirth = DateOfBirth,
+                Bio = Bio
+            };
+
+            var response = await Http.PutAsJsonAsync("api/actor", request);
+
+            if (response.IsSuccessStatusCode)
+            {
+                ResponseMessage = "Actor updated successfully.";
+            }
+            else
+            {
+                ResponseMessage = $"Error: {response.ReasonPhrase}";
+            }
+        }
+        catch (Exception ex)
+        {
+            ResponseMessage = $"Exception: {ex.Message}";
+        }
+    }
+}

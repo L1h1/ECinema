@@ -1,0 +1,70 @@
+﻿@using SixLabors.ImageSharp
+@using SixLabors.ImageSharp.Processing
+@rendermode InteractiveServer
+<MudTextField T="int" @bind-Value="movieId" Label="Movie ID" Required="true" />
+<MudFileUpload T="IBrowserFile" Label="Upload Poster (PNG)" Accept=".png" MaximumFileCount="1" FilesChanged="UploadFiles">
+    <ActivatorContent>
+        <MudFab Color="MudBlazor.Color.Primary"
+                StartIcon="@Icons.Material.Filled.Image"
+                Label="Load Poster" />
+    </ActivatorContent>
+</MudFileUpload>
+
+
+@if (isSuccess)
+{
+    <MudText Typo="Typo.body1" Color="MudBlazor.Color.Primary">Poster uploaded successfully!</MudText>
+}
+
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="MudBlazor.Color.Primary">Error uploading poster.</MudText>
+}
+
+@code {
+    private int movieId;
+    private bool isSuccess = false;
+    private bool isError = false;
+    IBrowserFile _file;
+
+    private async Task HandleFileUpload()
+    {
+
+
+
+        if (_file == null || _file.ContentType != "image/png" || movieId <= 0)
+        {
+            isError = true;
+            isSuccess = false;
+            return;
+        }
+
+        try
+        {
+
+            using (var stream = _file.OpenReadStream())
+            {
+                var image = await Image.LoadAsync(stream);
+
+                var croppedImage = image.Clone(ctx => ctx.Resize(200, 300));
+
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Posters", $"{movieId}.png");
+
+                await croppedImage.SaveAsPngAsync(filePath);
+            }
+
+            isSuccess = true;
+            isError = false;
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+    private async Task UploadFiles(IBrowserFile file)
+    {
+        _file = file;
+        await HandleFileUpload();
+    }
+}

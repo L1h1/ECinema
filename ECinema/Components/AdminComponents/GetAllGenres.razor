@@ -1,0 +1,22 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTable Items="genres" Dense="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Genre ID</MudTh>
+        <MudTh>Genre Name</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.GenreId</MudTd>
+        <MudTd>@context.GenreName</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private List<Genre> genres = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        genres = await Http.GetFromJsonAsync<List<Genre>>("api/genres");
+    }
+}

@@ -4,16 +4,78 @@
 <CascadingAuthenticationState>
     <AuthorizeView>
         <Authorized>
-            @if (State.Role == "Admin")
+           <MudGrid Style="margin-top:100px;">
+    <!-- Левый вертикальный список -->
+    <MudItem xs="1" xm="1">
+        <MudList T="(string,int)">
+            @foreach (var (label, index) in ControllerList.Select((label, index) => (label, index)))
             {
-                
+                <MudListItem OnClick="() => SelectController(index)">
+                    @label
+                </MudListItem>
             }
+        </MudList>
+    </MudItem>
+
+    <!-- Правая область с компонентом -->
+    <MudItem xs="10" xm="10">
+        @if (SelectedController == 0)
+        {
+            <ActorComponent />
+        }
+        else if (SelectedController == 1)
+        {
+            <CinemaComponent />
+        }
+        else if (SelectedController == 2)
+        {
+            <GenreComponent />
+        }
+        else if (SelectedController == 3)
+        {
+            <MovieComponent />
+        }
+        else if (SelectedController == 4)
+        {
+            <ReviewComponent />
+        }
+        else if (SelectedController == 5)
+        {
+            <ActionLogComponent />
+        }
+        else if (SelectedController == 6)
+        {
+            <UserComponent />
+        }
+        else if (SelectedController == 7)
+        {
+            <WatchHistoryComponent />
+        }
+    </MudItem>
+</MudGrid>
         </Authorized>
     </AuthorizeView>
 
 </CascadingAuthenticationState>
 
 
+
 @code {
-    
+    private int SelectedController { get; set; } = 0;
+    private readonly List<string> ControllerList = new()
+    {
+        "Actor",
+        "Cinema",
+        "Genre",
+        "Movie",
+        "Review",
+        "UserActionLog",
+        "User",
+        "WatchHistory"
+    };
+
+    private void SelectController(int index)
+    {
+        SelectedController = index;
+    }
 }

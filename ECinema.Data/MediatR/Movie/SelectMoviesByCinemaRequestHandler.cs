@@ -23,7 +23,7 @@ namespace ECinema.Data.MediatR.MovieCinema
             var query = MovieQueries.SelectMoviesByCinemaQuery;
 
             using var command = new MySqlCommand(query, _connection);
-            command.Parameters.AddWithValue("@MovieId", request.CinemaId);
+            command.Parameters.AddWithValue("@CinemaId", request.CinemaId);
 
             using var reader = await command.ExecuteReaderAsync(cancellationToken);
 

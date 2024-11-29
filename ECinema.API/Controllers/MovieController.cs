@@ -37,7 +37,7 @@ namespace ECinema.WebApi.Controllers
 
         // GET: api/movie/title
         [HttpGet("title/{title}")]
-        public async Task<IActionResult> GetMovieById(string title)
+        public async Task<IActionResult> GetMovieByTitle(string title)
         {
             var request = new SelectMovieByTitleRequest { Title = title };
             var result = await _mediator.Send(request);
@@ -136,7 +136,7 @@ namespace ECinema.WebApi.Controllers
         public async Task<IActionResult> AddMovieActor([FromBody] InsertMovieActorRequest request)
         {
             var actorId = await _mediator.Send(request);
-            return CreatedAtAction(nameof(GetMovieById), actorId);
+            return Ok(nameof(AddMovieActor));
         }
 
         // POST: api/movie/cinema
@@ -145,7 +145,7 @@ namespace ECinema.WebApi.Controllers
         public async Task<IActionResult> AddMovieCinema([FromBody] InsertMovieCinemaRequest request)
         {
             var cinemaId = await _mediator.Send(request);
-            return CreatedAtAction(nameof(GetMovieById), cinemaId);
+            return Ok(nameof(AddMovieCinema));
         }
 
         // POST: api/movie/genre
@@ -154,7 +154,7 @@ namespace ECinema.WebApi.Controllers
         public async Task<IActionResult> AddMovieGenre([FromBody] InsertMovieGenreRequest request)
         {
             var genreId = await _mediator.Send(request);
-            return CreatedAtAction(nameof(GetMovieById), genreId);
+            return Ok(nameof(AddMovieGenre));
         }
 
         // GET: api/movie/actor/{actorId}

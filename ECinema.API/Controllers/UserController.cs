@@ -62,6 +62,8 @@ public class UsersController : ControllerBase
     [HttpDelete("{userId}")]
     public async Task<IActionResult> DeleteUserById(int userId)
     {
+        if (userId == 0)
+            return Forbid();
         var result = await _mediator.Send(new DeleteUserByIdRequest { UserId = userId });
         if (result)
             return NoContent();

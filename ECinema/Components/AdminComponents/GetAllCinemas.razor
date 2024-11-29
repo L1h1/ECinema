@@ -1,0 +1,48 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudTable Items="cinemas" Dense="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Cinema ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Website</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.CinemaId</MudTd>
+        <MudTd>@context.CinemaName</MudTd>
+        <MudTd>@context.WebsiteUrl</MudTd>
+    </RowTemplate>
+</MudTable>
+@if (isSuccess)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Cinemas fetched successfully!</MudText>
+}
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to fetch cinemas.</MudText>
+}
+
+
+
+
+@code {
+    private List<Cinema> cinemas = new();
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            cinemas = await Http.GetFromJsonAsync<List<Cinema>>("api/cinema");
+            isSuccess = true;
+            isError = false;
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

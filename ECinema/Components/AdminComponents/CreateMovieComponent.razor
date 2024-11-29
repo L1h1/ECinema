@@ -1,0 +1,50 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudForm>
+    <MudTextField T="string" @bind-Value="newMovie.Title" Label="Title" Required="true" />
+    <MudTextField T="string" @bind-Value="newMovie.Description" Label="Description" />
+    <MudTextField T="int" @bind-Value="newMovie.ReleaseYear" Label="Release Year" />
+    <MudTextField T="int" @bind-Value="newMovie.DurationMinutes" Label="Duration (Minutes)" />
+    <MudTextField T="string" @bind-Value="newMovie.TrailerUrl" Label="Trailer Url" />
+
+    <MudButton OnClick="CreateMovie" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+        Create Movie
+    </MudButton>
+</MudForm>
+
+@if (isCreated)
+{
+    <MudText Typo="Typo.body1" Color="Color.Success">Movie Created Successfully!</MudText>
+}
+
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error">Error creating movie. Please try again.</MudText>
+}
+
+@code {
+    private Movie newMovie = new Movie();
+    private bool isCreated = false;
+    private bool isError = false;
+
+    private async Task CreateMovie()
+    {
+        try
+        {
+            var response = await Http.PostAsJsonAsync("api/movie", newMovie);
+            if (response.IsSuccessStatusCode)
+            {
+                isCreated = true;
+                newMovie = new Movie(); // Reset form
+            }
+            else
+            {
+                isError = true;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+        }
+    }
+}

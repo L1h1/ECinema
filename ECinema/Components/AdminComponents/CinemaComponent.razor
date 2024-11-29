@@ -1,15 +1,15 @@
 ﻿@inject HttpClient Http
-
+@rendermode InteractiveServer
 <MudGrid>
     <!-- Список эндпоинтов -->
     <MudItem xs="2">
         <MudList T="int">
-            <MudListItem OnClick="@(() => Refresh(0))">Get All Actors</MudListItem>
-            <MudListItem OnClick="@(() => Refresh(1))">Get Actor By ID</MudListItem>
-            <MudListItem OnClick="@(() => Refresh(2))">Get Actors By Movie</MudListItem>
-            <MudListItem OnClick="@(() => Refresh(3))">Create Actor</MudListItem>
-            <MudListItem OnClick="@(() => Refresh(4))">Update Actor</MudListItem>
-            <MudListItem OnClick="@(() => Refresh(5))">Delete Actor</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(0))">Get All Cinemas</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(1))">Get Cinema By Id</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(2))">Create Cinema</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(3))">Update Cinema Name</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(4))">Update Cinema Website</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(5))">Delete Cinema</MudListItem>
         </MudList>
     </MudItem>
 
@@ -17,27 +17,27 @@
     <MudItem xs="10">
         @if (SelectedEndpoint == 0)
         {
-            <GetAllActors />
+            <GetAllCinemas />
         }
         else if (SelectedEndpoint == 1)
         {
-            <GetActorById />
+            <GetCinemaById  />
         }
         else if (SelectedEndpoint == 2)
         {
-            <ActorsByMovie />
+            <CreateCinema  />
         }
         else if (SelectedEndpoint == 3)
         {
-            <CreateActor />
+            <UpdateCinemaName  />
         }
         else if (SelectedEndpoint == 4)
         {
-            <UpdateActor />
+            <UpdateCinemaWebsite  />
         }
         else if (SelectedEndpoint == 5)
         {
-            <DeleteActor />
+            <DeleteCinema  />
         }
     </MudItem>
 </MudGrid>

@@ -1,0 +1,56 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudButton OnClick="GetAllUsers" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get All Users
+</MudButton>
+
+@if (users.Any())
+{
+    <MudTable Items="users" Dense="true" Hover="true">
+        <HeaderContent>
+            <MudTh>User ID</MudTh>
+            <MudTh>Email</MudTh>
+            <MudTh>Role ID</MudTh>
+            <MudTh>Actions</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.UserId</MudTd>
+            <MudTd>@context.Email</MudTd>
+            <MudTd>@context.RoleId</MudTd>
+            <MudTd>
+                <MudButton OnClick="@(() => DeleteUser(@context.UserId))" Color="Color.Error">Delete</MudButton>
+            </MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else
+{
+    <MudText Typo="Typo.body1" Color="Color.Secondary">No users found.</MudText>
+}
+
+@code {
+    private List<User> users = new();
+
+    private async Task GetAllUsers()
+    {
+        var response = await Http.GetFromJsonAsync<List<User>>("api/users");
+        users = response ?? new List<User>();
+    }
+
+    private async Task DeleteUser(int userId)
+    {
+        var response = await Http.DeleteAsync($"api/users/{userId}");
+        if (response.IsSuccessStatusCode)
+        {
+            // Refresh the user list
+            await GetAllUsers();
+        }
+    }
+
+    public class User
+    {
+        public int UserId { get; set; }
+        public string Email { get; set; }
+        public int RoleId { get; set; }
+    }
+}

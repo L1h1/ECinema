@@ -1,0 +1,32 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField @bind-Value="movieId" Label="Movie ID" Variant="Variant.Filled" />
+<MudButton OnClick="GetReviewsByMovieHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get Reviews by Movie
+</MudButton>
+
+<MudTable Items="reviews" Dense="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Review ID</MudTh>
+        <MudTh>User ID</MudTh>
+        <MudTh>Contents</MudTh>
+        <MudTh>Rating</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.ReviewId</MudTd>
+        <MudTd>@context.UserId</MudTd>
+        <MudTd>@context.ReviewText</MudTd>
+        <MudTd>@context.ReviewRating</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private int movieId;
+    private List<Review> reviews = new();
+
+    private async Task GetReviewsByMovieHandler()
+    {
+        reviews = await Http.GetFromJsonAsync<List<Review>>($"api/review/movie/{movieId}");
+    }
+}

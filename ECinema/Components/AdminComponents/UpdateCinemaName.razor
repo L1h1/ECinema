@@ -1,0 +1,68 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudCard Style="max-width: 600px;">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Update Cinema Name</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="cinemaIdToUpdate" Label="Cinema ID" Variant="Variant.Filled" />
+        <MudTextField @bind-Value="newCinemaName" Label="New Cinema Name" Variant="Variant.Filled" />
+
+        <MudButton OnClick="UpdateCinemaNameHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+            Update Cinema Name
+        </MudButton>
+    </MudCardContent>
+    @if (isSuccess)
+    {
+        <MudText Typo="Typo.body1" Color="Color.Primary"  Class="mt-4">Cinema name updated successfully!</MudText>
+    }
+    @if (isError)
+    {
+        <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to update cinema name.</MudText>
+    }
+</MudCard>
+
+
+
+
+@code {
+    private string cinemaIdToUpdate = string.Empty;
+    private string newCinemaName = string.Empty;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task UpdateCinemaNameHandler()
+    {
+        try
+        {
+            if (int.TryParse(cinemaIdToUpdate, out int id))
+            {
+                var updateRequest = new { CinemaId=cinemaIdToUpdate,CinemaName = newCinemaName };
+                var response = await Http.PutAsJsonAsync($"api/cinema/name", updateRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    isSuccess = true;
+                    isError = false;
+                }
+                else
+                {
+                    isError = true;
+                    isSuccess = false;
+                }
+            }
+            else
+            {
+                isError = true;
+                isSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

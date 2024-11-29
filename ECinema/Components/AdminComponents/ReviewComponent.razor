@@ -1,0 +1,42 @@
+﻿@inject HttpClient Http
+
+<MudGrid>
+    <!-- Список эндпоинтов -->
+    <MudItem xs="2">
+        <MudList T="int">
+            <MudListItem OnClick="@(() => Refresh(0))">Get Reviews By Movie</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(1))">Get Review By Id Component</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(2))">Delete Review Component</MudListItem>
+
+        </MudList>
+    </MudItem>
+
+    <!-- Рабочая зона -->
+    <MudItem xs="10">
+        @if (SelectedEndpoint == 0)
+        {
+            <GetReviewsByMovie />
+        }
+        else if (SelectedEndpoint == 1)
+        {
+            <GetReviewByIdComponent />
+        }
+        else if (SelectedEndpoint == 2)
+        {
+            <DeleteReviewComponent />
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int SelectedEndpoint { get; set; } = 0;
+
+    private async void Refresh(int i)
+    {
+        SelectedEndpoint = i;
+        StateHasChanged();
+    }
+
+
+
+}

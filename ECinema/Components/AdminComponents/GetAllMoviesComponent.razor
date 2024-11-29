@@ -1,0 +1,45 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudButton OnClick="GetAllMovies" Variant="Variant.Filled" Color="Color.Primary">Get All Movies</MudButton>
+
+@if (movies.Any())
+{
+    <MudTable Items="movies" Dense="true" Hover="true">
+        <HeaderContent>
+            <MudTh>Movie ID</MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Release Year</MudTh>
+            <MudTh>Duration</MudTh>
+            <MudTh>Description</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.MovieId</MudTd>
+            <MudTd>@context.Title</MudTd>
+            <MudTd>@context.ReleaseYear</MudTd>
+            <MudTd>@context.DurationMinutes</MudTd>
+            <MudTd>@context.Description</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error">Error fetching movies</MudText>
+}
+
+@code {
+    private List<Movie> movies = new List<Movie>();
+    private bool isError = false;
+
+    private async Task GetAllMovies()
+    {
+        try
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>("api/movie/all");
+        }
+        catch (Exception)
+        {
+            isError = true;
+        }
+    }
+}

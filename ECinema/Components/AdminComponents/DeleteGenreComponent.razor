@@ -1,0 +1,48 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField @bind-Value="genreId" Label="Genre ID to Delete" Variant="Variant.Filled" />
+<MudButton OnClick="DeleteGenreHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Delete Genre
+</MudButton>
+
+@if (isSuccess)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Genre deleted successfully!</MudText>
+}
+
+@if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to delete genre.</MudText>
+}
+
+@code {
+    private int genreId;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task DeleteGenreHandler()
+    {
+        try
+        {
+            var response = await Http.DeleteAsync($"api/genres/{genreId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                isSuccess = true;
+                isError = false;
+                genreId = 0;
+            }
+            else
+            {
+                isSuccess = false;
+                isError = true;
+            }
+        }
+        catch (Exception)
+        {
+            isSuccess = false;
+            isError = true;
+        }
+    }
+}

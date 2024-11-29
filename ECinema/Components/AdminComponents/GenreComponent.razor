@@ -1,0 +1,47 @@
+﻿@inject HttpClient Http
+
+<MudGrid>
+    <!-- Список эндпоинтов -->
+    <MudItem xs="2">
+        <MudList T="int">
+            <MudListItem OnClick="@(() => Refresh(0))">Get All Genres</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(1))">Create Genre</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(2))">Delete genre by id</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(3))">Delete genre by name</MudListItem>
+
+        </MudList>
+    </MudItem>
+
+    <!-- Рабочая зона -->
+    <MudItem xs="10">
+        @if (SelectedEndpoint == 0)
+        {
+            <GetAllGenres />
+        }
+        else if (SelectedEndpoint == 1)
+        {
+            <CreateGenreComponent />
+        }
+        else if (SelectedEndpoint == 2)
+        {
+            <DeleteGenreComponent />
+        }
+        else if (SelectedEndpoint == 3)
+        {
+            <DeleteGenreByNameComponent />
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int SelectedEndpoint { get; set; } = 0;
+
+    private async void Refresh(int i)
+    {
+        SelectedEndpoint = i;
+        StateHasChanged();
+    }
+
+
+
+}

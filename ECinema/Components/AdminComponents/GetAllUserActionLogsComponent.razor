@@ -1,0 +1,37 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudButton OnClick="GetAllUserActionLogsHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get All User Action Logs
+</MudButton>
+
+<MudTable Items="userActionLogs" Dense="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Log ID</MudTh>
+        <MudTh>User ID</MudTh>
+        <MudTh>Action Type</MudTh>
+        <MudTh>Timestamp</MudTh>
+        <MudTh>Details</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.LogId</MudTd>
+        <MudTd>@context.UserId</MudTd>
+        <MudTd>@context.ActionType</MudTd>
+        <MudTd>@context.ActionTime.ToString("g")</MudTd>
+        <MudTd>@context.ActionDetails</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private List<UserActionLog> userActionLogs = new();
+
+    private async Task GetAllUserActionLogsHandler()
+    {
+        var response = await Http.GetFromJsonAsync<List<UserActionLog>>("api/useractionslog/all");
+
+        if (response != null)
+        {
+            userActionLogs = response;
+        }
+    }
+}

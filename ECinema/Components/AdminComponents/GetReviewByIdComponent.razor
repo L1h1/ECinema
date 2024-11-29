@@ -1,0 +1,53 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField @bind-Value="reviewId" Label="Review ID" Variant="Variant.Filled" />
+<MudButton OnClick="GetReviewByIdHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get Review
+</MudButton>
+        @if (isSuccess)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Review fetched successfully!</MudText>
+        }
+        @if (isError)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to fetch review.</MudText>
+        }
+@if (review != null)
+{
+    <MudCard>
+        <MudCardHeader>
+            <MudText Typo="Typo.h6">Review Details</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudText>Review ID: @review.ReviewId</MudText>
+            <MudText>Movie ID: @review.MovieId</MudText>
+            <MudText>User ID: @review.UserId</MudText>
+            <MudText>Review Text: @review.ReviewText</MudText>
+            <MudText>Rating: @review.ReviewRating</MudText>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code {
+    private int reviewId;
+    private Review review;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+
+
+    private async Task GetReviewByIdHandler()
+    {
+        try
+        {
+            review = await Http.GetFromJsonAsync<Review>($"api/review/{reviewId}");
+            isSuccess = true;
+            isError = false;
+        }catch(Exception ex)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

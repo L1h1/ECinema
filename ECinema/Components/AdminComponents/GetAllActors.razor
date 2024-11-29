@@ -1,0 +1,25 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudTable Items="actors" Dense="true" Hover="true">
+    <HeaderContent>
+        <MudTh>Actor ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Date Of Birth</MudTh>
+        <MudTh>Bio</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.ActorId</MudTd>
+        <MudTd>@context.ActorName</MudTd>
+        <MudTd>@context.DateOfBirth?.ToString("dd MMM yyyy")</MudTd>
+        <MudTd>@context.Bio</MudTd>
+    </RowTemplate>
+</MudTable>
+
+@code {
+    private List<Actor> actors = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        actors = await Http.GetFromJsonAsync<List<Actor>>("api/actor");
+    }
+}

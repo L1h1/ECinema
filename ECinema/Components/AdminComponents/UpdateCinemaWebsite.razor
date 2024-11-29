@@ -1,0 +1,67 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudCard Style="max-width: 600px;">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Update Cinema Website</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="cinemaIdToUpdateWebsite" Label="Cinema ID" Variant="Variant.Filled" />
+        <MudTextField @bind-Value="newWebsite" Label="New Website" Variant="Variant.Filled" />
+
+        <MudButton OnClick="UpdateCinemaWebsiteHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+            Update Website
+        </MudButton>
+        @if (isSuccess)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Cinema website updated successfully!</MudText>
+        }
+        @if (isError)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to update cinema websire.</MudText>
+        }
+    </MudCardContent>
+</MudCard>
+
+
+
+@code {
+    private string cinemaIdToUpdateWebsite = string.Empty;
+    private string newWebsite = string.Empty;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task UpdateCinemaWebsiteHandler()
+    {
+        try
+        {
+            if (int.TryParse(cinemaIdToUpdateWebsite, out int id))
+            {
+                var updateRequest = new { cinemaId = cinemaIdToUpdateWebsite, websiteUrl = newWebsite };
+                var response = await Http.PutAsJsonAsync($"api/cinema/website", updateRequest);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    isSuccess = true;
+                    isError = false;
+                }
+                else
+                {
+                    isError = true;
+                    isSuccess = false;
+                }
+            }
+            else
+            {
+                isError = true;
+                isSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

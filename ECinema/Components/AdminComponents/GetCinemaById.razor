@@ -1,0 +1,78 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudCard Style="max-width: 600px;">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Get Cinema By ID</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="cinemaId" Label="Cinema ID" Variant="Variant.Filled" />
+
+        <MudButton OnClick="GetCinemaByIdHandler" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+            Get Cinema
+        </MudButton>
+
+        @if (isSuccess)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" hidden="@(isSuccess)" Class="mt-4">Cinema fetched successfully!</MudText>
+        }
+        @if (isError)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" hidden="@(isError)" Class="mt-4">Failed to fetch cinema.</MudText>
+        }
+        
+        
+    </MudCardContent>
+</MudCard>
+@if (cinema != null)
+{
+    <MudCard Class="mt-4" Style="max-width: 400px;">
+        <MudCardHeader>
+            <MudText Typo="Typo.h6">Cinema Details</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudList Dense="true" T="Actor">
+                <MudListItem>
+                    <MudText><b>Cinema ID:</b> @cinema.CinemaId</MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText><b>Cinema Name:</b> @cinema.CinemaName</MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText><b>URL</b> @cinema.WebsiteUrl</MudText>
+                </MudListItem>
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+}
+
+@code {
+    private string cinemaId = string.Empty;
+    private Cinema cinema = null;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task GetCinemaByIdHandler()
+    {
+        try
+        {
+            if (int.TryParse(cinemaId, out int id))
+            {
+                cinema = await Http.GetFromJsonAsync<Cinema>($"api/cinema/{id}");
+                isSuccess = true;
+                isError = false;
+            }
+            else
+            {
+                isError = true;
+                isSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

@@ -1,0 +1,33 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudGrid>
+    <!-- Список эндпоинтов -->
+    <MudItem xs="2">
+        <MudList T="int">
+            <MudListItem OnClick="@(() => Refresh(0))">User's watch history</MudListItem>
+
+        </MudList>
+    </MudItem>
+
+    <!-- Рабочая зона -->
+    <MudItem xs="10">
+        @if (SelectedEndpoint == 0)
+        {
+            <SelectWatchHistoryByUserComponent />
+        }
+
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int SelectedEndpoint { get; set; } = 0;
+
+    private async void Refresh(int i)
+    {
+        SelectedEndpoint = i;
+        StateHasChanged();
+    }
+
+
+
+}

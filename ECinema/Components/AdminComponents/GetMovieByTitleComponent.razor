@@ -1,0 +1,45 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudTextField T="string" @bind-Value="movieTitle" Label="Movie Title" Required="true" />
+
+<MudButton OnClick="GetMoviesByTitle" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get Movies by Title
+</MudButton>
+
+@if (movies.Any())
+{
+    <MudTable Items="movies" Dense="true" Hover="true">
+        <HeaderContent>
+            <MudTh>Movie ID</MudTh>
+            <MudTh>Title</MudTh>
+            <MudTh>Release Year</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd>@context.MovieId</MudTd>
+            <MudTd>@context.Title</MudTd>
+            <MudTd>@context.ReleaseYear</MudTd>
+        </RowTemplate>
+    </MudTable>
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error" Class="mt-4">Movies with the specified title not found.</MudText>
+}
+
+@code {
+    private string movieTitle;
+    private List<Movie> movies = new List<Movie>();
+    private bool isError = false;
+
+    private async Task GetMoviesByTitle()
+    {
+        try
+        {
+            movies = await Http.GetFromJsonAsync<List<Movie>>($"api/movie/title/{movieTitle}");
+        }
+        catch (Exception)
+        {
+            isError = true;
+        }
+    }
+}

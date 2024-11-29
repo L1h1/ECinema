@@ -1,0 +1,40 @@
+﻿@inject HttpClient Http
+
+<MudTextField @bind-Value="movieId" Label="Movie ID" Variant="Variant.Filled" ShrinkLabel/>
+<MudButton OnClick="LoadActorsByMovie" Variant="Variant.Filled" Color="Color.Primary">Load Actors</MudButton>
+
+<MudTable Items="actors" Dense="true" Hover="true" Class="mt-4" Bordered="true">
+    <HeaderContent>
+        <MudTh>Actor ID</MudTh>
+        <MudTh>Name</MudTh>
+        <MudTh>Date Of Birth</MudTh>
+        <MudTh>Bio</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd>@context.ActorId</MudTd>
+        <MudTd>@context.ActorName</MudTd>
+        <MudTd>@context.DateOfBirth?.ToString("dd MMM yyyy")</MudTd>
+        <MudTd>@context.Bio</MudTd>
+    </RowTemplate>
+</MudTable>
+
+
+
+@code {
+    private int movieId;
+    private List<Actor> actors = new();
+
+
+    private async Task LoadActorsByMovie()
+    {
+        try
+        {
+            actors = await Http.GetFromJsonAsync<List<Actor>>($"api/actor/movie/{movieId}");
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}

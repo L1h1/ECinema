@@ -1,0 +1,55 @@
+﻿@inject HttpClient Http
+
+<MudTextField @bind-Value="actorId" Label="Actor ID" Variant="Variant.Filled" ShrinkLabel/>
+<MudButton OnClick="LoadActorById" Variant="Variant.Filled" Color="Color.Primary">Get Actor</MudButton>
+
+@if (actor != null)
+{
+    <MudCard Class="mt-4" Style="max-width: 400px;">
+        <MudCardHeader>
+            <MudText Typo="Typo.h6">Actor Details</MudText>
+        </MudCardHeader>
+        <MudCardContent>
+            <MudList Dense="true" T="Actor">
+                <MudListItem>
+                    <MudText><b>Actor ID:</b> @actor.ActorId</MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText><b>Name:</b> @actor.ActorName</MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText><b>Date of Birth:</b> @actor.DateOfBirth?.ToString("dd MMM yyyy")</MudText>
+                </MudListItem>
+                <MudListItem>
+                    <MudText><b>Bio:</b> @actor.Bio</MudText>
+                </MudListItem>
+            </MudList>
+        </MudCardContent>
+    </MudCard>
+}
+else if (isActorLoaded)
+{
+    <MudText Color="Color.Error">Actor not found.</MudText>
+}
+
+<MudSnackbarProvider />
+
+@code {
+    private int actorId;
+    private Actor? actor = null;
+    private bool isActorLoaded = false; // Indicates if the actor was searched for.
+
+    private async Task LoadActorById()
+    {
+        try
+        {
+            actor = await Http.GetFromJsonAsync<Actor>($"api/actor/{actorId}");
+            isActorLoaded = true;
+
+        }
+        catch (Exception ex)
+        {
+
+        }
+    }
+}

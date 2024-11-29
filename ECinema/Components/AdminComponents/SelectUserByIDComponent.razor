@@ -1,0 +1,46 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+<MudTextField T="int" @bind-Value="userId" Label="User ID" Required="true" />
+
+<MudButton OnClick="GetUserById" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get User Info
+</MudButton>
+
+@if (user != null)
+{
+    <MudText Typo="Typo.body1" Class="mt-4">User ID: @user.UserId</MudText>
+    <MudText Typo="Typo.body1">Email: @user.Email</MudText>
+    <MudText Typo="Typo.body1">Role ID: @user.RoleId</MudText>
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error" Class="mt-4">User not found or access denied.</MudText>
+}
+
+@code {
+    private int userId;
+    private User user;
+    private bool isError;
+
+    private async Task GetUserById()
+    {
+        var response = await Http.GetFromJsonAsync<User>($"api/users/{userId}");
+
+        if (response != null)
+        {
+            user = response;
+            isError = false;
+        }
+        else
+        {
+            isError = true;
+        }
+    }
+
+    public class User
+    {
+        public int UserId { get; set; }
+        public string Email { get; set; }
+        public int RoleId { get; set; }
+    }
+}

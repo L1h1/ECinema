@@ -1,0 +1,52 @@
+﻿@inject HttpClient Http
+
+<MudGrid>
+    <!-- Список эндпоинтов -->
+    <MudItem xs="2">
+        <MudList T="int">
+            <MudListItem OnClick="@(() => Refresh(0))">Check user credentials</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(1))">Select all users</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(2))">Select user by id</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(3))">Update user email</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(4))">Update user password</MudListItem>
+        </MudList>
+    </MudItem>
+
+    <!-- Рабочая зона -->
+    <MudItem xs="10">
+        @if (SelectedEndpoint == 0)
+        {
+            <CheckUserCredentialsComponent />
+        }
+        else if (SelectedEndpoint == 1)
+        {
+            <SelectAllUsersComponent />
+        }
+        else if (SelectedEndpoint == 2)
+        {
+            <SelectUserByIDComponent />
+        }
+        else if (SelectedEndpoint == 3)
+        {
+            <UpdateUserEmailComponent />
+        }
+        else if (SelectedEndpoint == 4)
+        {
+            <UpdateUserPasswordComponent />
+        }
+
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int SelectedEndpoint { get; set; } = 0;
+
+    private async void Refresh(int i)
+    {
+        SelectedEndpoint = i;
+        StateHasChanged();
+    }
+
+
+
+}

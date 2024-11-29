@@ -1,0 +1,101 @@
+﻿@inject HttpClient Http
+
+<MudGrid>
+    <!-- Список эндпоинтов -->
+    <MudItem xs="2">
+        <MudList T="int">
+            <MudListItem OnClick="@(() => Refresh(0))">Get All Movies Component</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(1))">Get Movie By Id Component</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(2))">Get Movies By Title Component</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(3))">Get Movies By Actor</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(4))">Get Movies By Cinema</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(5))">Get Movies By Genre</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(6))">Add Movie</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(7))">Add MovieActor</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(8))">Add MovieCinema</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(9))">Add MovieGenre</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(10))">Delete Movie</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(11))">Delete MovieGenre</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(12))">Delete MovieActor</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(13))">Delete MovieCinema</MudListItem>
+            <MudListItem OnClick="@(() => Refresh(14))">Add Poster to movie</MudListItem>
+        </MudList>
+    </MudItem>
+
+    <!-- Рабочая зона -->
+    <MudItem xs="10">
+        @if (SelectedEndpoint == 0)
+        {
+            <GetAllMoviesComponent />
+        }
+        else if (SelectedEndpoint == 1)
+        {
+            <GetMovieByIdComponent />
+        }
+        else if (SelectedEndpoint == 2)
+        {
+            <GetMovieByTitleComponent />
+        }
+        else if (SelectedEndpoint == 3)
+        {
+            <GetMoviesByActor />
+        }
+        else if (SelectedEndpoint == 4)
+        {
+            <GetMoviesByCinema />
+        }
+        else if (SelectedEndpoint == 5)
+        {
+            <GetMoviesByGenre />
+        }
+        else if (SelectedEndpoint == 6)
+        {
+            <CreateMovieComponent />
+        }
+        else if (SelectedEndpoint == 7)
+        {
+            <AddMovieActor />
+        }
+        else if (SelectedEndpoint == 8)
+        {
+            <AddMovieCinema />
+        }
+        else if (SelectedEndpoint == 9)
+        {
+            <AddMovieGenre />
+        }
+        else if (SelectedEndpoint == 10)
+        {
+            <DeleteMovieComponent />
+        }
+        else if (SelectedEndpoint == 11)
+        {
+            <DeleteMovieGenreComponent />
+        }
+        else if (SelectedEndpoint == 12)
+        {
+            <DeleteMovieActorComponent />
+        }
+        else if (SelectedEndpoint == 13)
+        {
+            <DeleteMovieCinemaComponent />
+        }
+        else if (SelectedEndpoint == 14)
+        {
+            <PosterComponent />
+        }
+    </MudItem>
+</MudGrid>
+
+@code {
+    private int SelectedEndpoint { get; set; } = 0;
+
+    private async void Refresh(int i)
+    {
+        SelectedEndpoint = i;
+        StateHasChanged();
+    }
+
+
+
+}
