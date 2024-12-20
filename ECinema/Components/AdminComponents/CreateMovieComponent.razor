@@ -5,6 +5,7 @@
     <MudTextField T="string" @bind-Value="newMovie.Description" Label="Description" />
     <MudTextField T="int" @bind-Value="newMovie.ReleaseYear" Label="Release Year" />
     <MudTextField T="int" @bind-Value="newMovie.DurationMinutes" Label="Duration (Minutes)" />
+    <MudTextField T="int" @bind-Value="newMovie.StudioId" Label="Studio ID" />
     <MudTextField T="string" @bind-Value="newMovie.TrailerUrl" Label="Trailer Url" />
 
     <MudButton OnClick="CreateMovie" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">

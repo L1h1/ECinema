@@ -11,11 +11,13 @@
     <MudTable Items="moviesInCinema" Dense="true" Hover="true">
         <HeaderContent>
             <MudTh>Movie ID</MudTh>
+            <MudTh>Studio ID</MudTh>
             <MudTh>Title</MudTh>
             <MudTh>Release Year</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd>@context.MovieId</MudTd>
+            <MudTd>@context.StudioId</MudTd>
             <MudTd>@context.Title</MudTd>
             <MudTd>@context.ReleaseYear</MudTd>
         </RowTemplate>

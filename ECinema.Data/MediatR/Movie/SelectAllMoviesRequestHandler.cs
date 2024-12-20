@@ -33,7 +33,8 @@ namespace ECinema.Data.MediatR.Movie
                         ReleaseYear = (int)reader["ReleaseYear"],
                         DurationMinutes = (int)reader["DurationMinutes"],
                         CreatedAt = (DateTime)reader["CreatedAt"],
-                        TrailerUrl = (string)reader["TrailerUrl"]
+                        TrailerUrl = (string)reader["TrailerUrl"],
+                        StudioId = (int)reader["StudioId"]
                     });
                 }
             }

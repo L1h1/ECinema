@@ -1,0 +1,64 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudPopoverProvider />
+<MudCard Style="max-width: 600px;">
+    <MudCardHeader>
+        <MudText Typo="Typo.h6">Delete Studio</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField @bind-Value="studioIdToDelete" Label="Studio ID to Delete" Variant="Variant.Filled" />
+
+        <MudButton OnClick="DeleteStudioHandler" Variant="Variant.Filled" Color="Color.Error" Class="mt-4">
+            Delete Studio
+        </MudButton>
+        @if (isSuccess)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Studio deleted successfully!</MudText>
+        }
+        @if (isError)
+        {
+            <MudText Typo="Typo.body1" Color="Color.Primary" Class="mt-4">Failed to delete studio.</MudText>
+        }
+    </MudCardContent>
+</MudCard>
+
+
+@code {
+    private string studioIdToDelete = string.Empty;
+    private bool isSuccess = false;
+    private bool isError = false;
+
+    private async Task DeleteStudioHandler()
+    {
+        try
+        {
+            if (int.TryParse(studioIdToDelete, out int studioId))
+            {
+                var response = await Http.DeleteAsync($"api/studio/{studioId}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    isSuccess = true;
+                    isError = false;
+                    studioIdToDelete = string.Empty; // Clear input field
+                }
+                else
+                {
+                    isError = true;
+                    isSuccess = false;
+                }
+            }
+            else
+            {
+                isError = true;
+                isSuccess = false;
+            }
+        }
+        catch (Exception)
+        {
+            isError = true;
+            isSuccess = false;
+        }
+    }
+}

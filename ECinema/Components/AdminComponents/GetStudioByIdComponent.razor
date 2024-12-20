@@ -1,0 +1,37 @@
+﻿@inject HttpClient Http
+@rendermode InteractiveServer
+
+<MudTextField T="int" @bind-Value="studioId" Label="Movie ID" Required="true" />
+
+<MudButton OnClick="GetMovieById" Variant="Variant.Filled" Color="Color.Primary" Class="mt-4">
+    Get Studio by ID
+</MudButton>
+
+@if (studio != null)
+{
+    <MudText Typo="Typo.h6">ID: @studio.StudioId</MudText>
+    <MudText Typo="Typo.h6">NAME: @studio.StudioName</MudText>
+
+}
+else if (isError)
+{
+    <MudText Typo="Typo.body1" Color="Color.Error" Class="mt-4">Studio not found.</MudText>
+}
+
+@code {
+    private int studioId;
+    private Studio studio;
+    private bool isError = false;
+
+    private async Task GetMovieById()
+    {
+        try
+        {
+            studio = await Http.GetFromJsonAsync<Studio>($"api/studio/{studioId}");
+        }
+        catch (Exception)
+        {
+            isError = true;
+        }
+    }
+}

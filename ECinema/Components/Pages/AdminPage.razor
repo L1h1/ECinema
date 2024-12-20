@@ -51,6 +51,10 @@
         {
             <WatchHistoryComponent />
         }
+         else if (SelectedController == 8)
+        {
+            <StudioComponent />
+        }
     </MudItem>
 </MudGrid>
         </Authorized>
@@ -71,7 +75,8 @@
         "Review",
         "UserActionLog",
         "User",
-        "WatchHistory"
+        "WatchHistory",
+        "Studio"
     };
 
     private void SelectController(int index)

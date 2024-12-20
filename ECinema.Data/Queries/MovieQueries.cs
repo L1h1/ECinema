@@ -13,8 +13,8 @@ namespace ECinema.Data.Queries
         /// </summary>
 
         public static string InsertMovieQuery = @"
-        INSERT INTO Movies (Title, Description, ReleaseYear, DurationMinutes, TrailerUrl) 
-        VALUES (@Title, @Description, @ReleaseYear, @DurationMinutes,@TrailerUrl);";
+        INSERT INTO Movies (Title, Description, ReleaseYear, DurationMinutes, TrailerUrl,StudioId) 
+        VALUES (@Title, @Description, @ReleaseYear, @DurationMinutes,@TrailerUrl,@StudioId);";
 
         public static string UpdateMovieTitleQuery = @"
         UPDATE Movies 
@@ -23,7 +23,7 @@ namespace ECinema.Data.Queries
 
         public static string UpdateMovieDetailsQuery = @"
         UPDATE Movies 
-        SET Description = @Description, ReleaseYear = @ReleaseYear, DurationMinutes = @DurationMinutes, TrailerUrl=@TrailerUrl
+        SET Description = @Description, ReleaseYear = @ReleaseYear, DurationMinutes = @DurationMinutes, TrailerUrl=@TrailerUrl, StudioId = @StudioId
         WHERE MovieId = @MovieId;";
 
         public static string DeleteMovieByIdQuery = @"
@@ -31,12 +31,12 @@ namespace ECinema.Data.Queries
         WHERE MovieId = @MovieId;";
 
         public static string SelectMovieByIdQuery = @"
-        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt, TrailerUrl 
+        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt, TrailerUrl, StudioId 
         FROM Movies 
         WHERE MovieId = @MovieId;";
 
         public static string SelectMovieByNameQuery = @"
-        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt, TrailerUrl
+        SELECT MovieId, Title, Description, ReleaseYear, DurationMinutes, CreatedAt, TrailerUrl, StudioId 
         FROM Movies
         WHERE Title LIKE '%@Title%';";
 
@@ -50,7 +50,8 @@ namespace ECinema.Data.Queries
             ReleaseYear, 
             DurationMinutes, 
             CreatedAt,
-            TrailerUrl
+            TrailerUrl,
+            StudioId
         FROM Movies;";
 
 
@@ -68,7 +69,7 @@ namespace ECinema.Data.Queries
 
         //Фильмы по жанру
         public static string SelectMoviesByGenreQuery = @"
-        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt, m.TrailerUrl 
+        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt, m.TrailerUrl, m.StudioId 
         FROM Movies m
         INNER JOIN MovieGenres mg ON m.MovieId = mg.MovieId
         WHERE mg.GenreId = @GenreId;";
@@ -87,7 +88,7 @@ namespace ECinema.Data.Queries
         WHERE MovieId = @MovieId AND CinemaId = @CinemaId;";
 
         public static string SelectMoviesByCinemaQuery = @"
-        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt,m.TrailerUrl 
+        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt,m.TrailerUrl, m.StudioId 
         FROM Movies m
         INNER JOIN MovieCinemas mc ON m.MovieId = mc.MovieId
         WHERE mc.CinemaId = @CinemaId;";
@@ -106,7 +107,7 @@ namespace ECinema.Data.Queries
         WHERE MovieId = @MovieId AND ActorId = @ActorId;";
 
         public static string SelectMoviesByActorQuery = @"
-        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt,m.TrailerUrl 
+        SELECT m.MovieId, m.Title, m.Description, m.ReleaseYear, m.DurationMinutes, m.CreatedAt,m.TrailerUrl, m.StudioId 
         FROM Movies m
         INNER JOIN MovieActors ma ON m.MovieId = ma.MovieId
         WHERE ma.ActorId = @ActorId;";

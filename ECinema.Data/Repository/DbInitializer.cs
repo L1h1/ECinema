@@ -30,6 +30,9 @@ namespace ECinema.Data.Repository
             command.CommandText = TableCreationQueries.CreateCinemasTableQuery;
             command.ExecuteNonQuery();
 
+            command.CommandText = TableCreationQueries.CreateStudioTableQuery;
+            command.ExecuteNonQuery();
+
             command.CommandText = TableCreationQueries.CreateMoviesTableQuery;
             command.ExecuteNonQuery();
 
@@ -54,6 +57,12 @@ namespace ECinema.Data.Repository
             command.CommandText = TableCreationQueries.CreateM2MovieActorsTableQuery;
             command.ExecuteNonQuery();
 
+
+            command.CommandText = @"CREATE INDEX movieTitleIndex
+                                    ON Movies(Title)";
+            command.ExecuteNonQuery();
+
+
             connection.Close();
 
         }
@@ -68,7 +77,7 @@ namespace ECinema.Data.Repository
             using var transaction = connection.BeginTransaction();
             try
             {
-/*                // Insert Roles
+                // Insert Roles
                 var insertRoles = @"
             INSERT INTO Roles (RoleId, RoleName) VALUES
             (1, 'Admin'),
@@ -77,10 +86,10 @@ namespace ECinema.Data.Repository
 
                 // Insert Users
                 var insertUsers = @"
-            INSERT INTO Users (UserId, Username, Password, Email, RoleId) VALUES
+            INSERT INTO Users (UserId, Username, PasswordHash, Email, RoleId) VALUES
             (1, 'AdminUser', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'admin@example.com', 1),
             (2, 'RegularUser', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'user@example.com', 2);";
-                ExecuteQuery(connection, insertUsers);*/
+                ExecuteQuery(connection, insertUsers);
 
                 // Insert Genres
                 var insertGenres = @"
@@ -97,11 +106,21 @@ namespace ECinema.Data.Repository
             (2, 'CinemaTwo');";
                 ExecuteQuery(connection, insertCinemas);
 
+
+                //Insert Studios
+                var insertStudios = @"
+                INSERT INTO Studios (StudioName) VALUES
+                ('FirstStudio'),
+                ('SecondStudio');
+";
+                ExecuteQuery(connection,insertStudios);
+
+
                 // Insert Movies
                 var insertMovies = @"
-            INSERT INTO Movies (MovieId, Title, Description, ReleaseYear, DurationMinutes) VALUES
-            (1, 'Action Movie', 'An exciting action movie.', 2022, 120),
-            (2, 'Comedy Movie', 'A hilarious comedy movie.', 2021, 90);";
+            INSERT INTO Movies (MovieId, Title, Description, ReleaseYear, DurationMinutes, StudioId) VALUES
+            (1, 'Action Movie', 'An exciting action movie.', 2022, 120, 1),
+            (2, 'Comedy Movie', 'A hilarious comedy movie.', 2021, 90, 2);";
                 ExecuteQuery(connection, insertMovies);
 
                 // Insert Actors

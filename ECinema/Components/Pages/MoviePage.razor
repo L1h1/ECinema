@@ -4,24 +4,25 @@
 @rendermode InteractiveServer
 @inject HttpClient Http
 
-@if(movie==null){
+@if (movie == null)
+{
 
 }
 else
 {
     <MudMainContent Class="ma-4">
         <MudContainer MaxWidth="MaxWidth.Large">
-        <MudGrid>
-            <MudItem xs="12" sm="6" md="4">
-                <MudCard Style="max-width: 200px; margin: auto;">
-                    <MudCardMedia Image="@GetURI(MovieId)" />
-                    <MudCardContent>
-                        <MudText Typo="Typo.h5">@movie.Title</MudText>
-
-                        <MudText><b>Release Year:</b> @movie.ReleaseYear</MudText>
-                        <MudText><b>Duration:</b> @movie.DurationMinutes minutes</MudText>
-                    </MudCardContent>
-                </MudCard>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudCard Style="max-width: 200px; margin: auto;">
+                        <MudCardMedia Image="@GetURI(MovieId)" />
+                        <MudCardContent>
+                            <MudText Typo="Typo.h5">@movie.Title</MudText>
+                            <MudText><b>Studio:</b> @studio.StudioName</MudText>
+                            <MudText><b>Release Year:</b> @movie.ReleaseYear</MudText>
+                            <MudText><b>Duration:</b> @movie.DurationMinutes minutes</MudText>
+                        </MudCardContent>
+                    </MudCard>
                     <CascadingAuthenticationState>
                         <AuthorizeView>
                             <Authorized>
@@ -32,17 +33,17 @@ else
                             </NotAuthorized>
                         </AuthorizeView>
                     </CascadingAuthenticationState>
-            </MudItem>
-            <MudItem xs="12" sm="6" md="8" >
-                <MudCard Style="height:500px">
-                    <MudCardContent >
-                        <iframe src="@movie.TrailerUrl"></iframe>
-                    </MudCardContent>
-                </MudCard>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="8">
+                    <MudCard Style="height:500px">
+                        <MudCardContent>
+                            <iframe src="@movie.TrailerUrl"></iframe>
+                        </MudCardContent>
+                    </MudCard>
                 </MudItem>
 
                 <MudItem xs="12" sm="6" md="4">
-                    
+
                 </MudItem>
 
                 <MudItem xs="12" sm="6" md="8">
@@ -61,9 +62,9 @@ else
                     <AvailableCinemas MovieId="@MovieId"></AvailableCinemas>
                 </MudItem>
 
-                
+
                 <MudItem xs="12" sm="6" md="4">
-                    
+
                 </MudItem>
                 <MudItem xs="12" sm="6" md="8">
                     <ActorCard MovieId="@MovieId"></ActorCard>
@@ -72,18 +73,18 @@ else
 
                 </MudItem>
                 <MudItem xs="12" sm="6" md="8">
-                    @* <CascadingAuthenticationState>
-                        <AuthorizeView> *@
+                    <CascadingAuthenticationState>
+                        <AuthorizeView>
                             <!-- Написать отзыв -->
                             <WriteReviewComponent MovieId="@MovieId" TriggerRender="@RefreshReview" />
-                       @*  </AuthorizeView>
-                    </CascadingAuthenticationState> *@
-                    
+                        </AuthorizeView>
+                    </CascadingAuthenticationState>
+
                     <!-- Отзывы -->
                     <ReviewsComponent MovieId="@MovieId" @ref="refComp" />
                 </MudItem>
-        </MudGrid>
-    </MudContainer>
+            </MudGrid>
+        </MudContainer>
     </MudMainContent>
 }
 
@@ -93,10 +94,12 @@ else
     ReviewsComponent refComp;
 
     private Movie? movie;
+    private Studio? studio;
 
     protected override async Task OnInitializedAsync()
     {
         movie = await Http.GetFromJsonAsync<Movie>($"api/movie/{MovieId}");
+        studio = await Http.GetFromJsonAsync<Studio>($"api/studio/{movie.StudioId}");
     }
     private string GetURI(int id) => $"/Posters/{id}.png";
 

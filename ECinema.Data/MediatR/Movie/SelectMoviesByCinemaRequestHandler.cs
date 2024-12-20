@@ -39,7 +39,8 @@ namespace ECinema.Data.MediatR.MovieCinema
                     ReleaseYear = reader["ReleaseYear"] as int? ?? 0, 
                     DurationMinutes = reader["DurationMinutes"] as int? ?? 0, 
                     CreatedAt = (DateTime)reader["CreatedAt"],
-                    TrailerUrl = (string)reader["TrailerUrl"]
+                    TrailerUrl = (string)reader["TrailerUrl"],
+                    StudioId = (int)reader["StudioId"]
                 };
 
                 movies.Add(movie);

@@ -46,7 +46,9 @@ namespace ECinema.Data.Queries
             ReleaseYear INT,       
             DurationMinutes INT,
             TrailerUrl VARCHAR(255),
-            CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP
+            CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+            StudioId INT NOT NULL,
+            FOREIGN KEY (StudioId) REFERENCES Studios(StudioId) ON DELETE CASCADE
         );";
 
         public static string CreateM2MMovieGenreTableQuery = @"
@@ -101,7 +103,7 @@ namespace ECinema.Data.Queries
         public static string CreateActorsTableQuery = @"
         CREATE OR REPLACE TABLE Actors (
              ActorId INT AUTO_INCREMENT PRIMARY KEY,    
-             ActorName VARCHAR(100) NOT NULL UNIQUE,    
+             ActorName VARCHAR(100) NOT NULL,    
              DateOfBirth DATE,    
              Bio TEXT
         );";
@@ -114,6 +116,13 @@ namespace ECinema.Data.Queries
              FOREIGN KEY(MovieId) REFERENCES Movies(MovieId) ON DELETE CASCADE,
              FOREIGN KEY(ActorId) REFERENCES Actors(ActorId) ON DELETE CASCADE
         );";
+
+        public static string CreateStudioTableQuery = @"
+        CREATE OR REPLACE TABLE Studios(
+            StudioId INT AUTO_INCREMENT PRIMARY KEY,
+            StudioName VARCHAR(100) NOT NULL UNIQUE
+        );";
+
 
     }
 

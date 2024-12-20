@@ -10,5 +10,7 @@ namespace ECinema.Data.MediatR.Movie
         public int DurationMinutes { get; set; }
 
         public string TrailerUrl { get; set; }
+
+        public int StudioId { get;set; }
     }
 }

@@ -27,6 +27,7 @@ namespace ECinema.Data.MediatR.Movie
             command.Parameters.AddWithValue("@ReleaseYear", request.ReleaseYear);
             command.Parameters.AddWithValue("@DurationMinutes", request.DurationMinutes);
             command.Parameters.AddWithValue("@TrailerUrl", request.TrailerUrl);
+            command.Parameters.AddWithValue("@StudioId",request.StudioId);
 
             await command.ExecuteNonQueryAsync(cancellationToken);
             var insertedId = (int)command.LastInsertedId;
